@@ -4,21 +4,19 @@ Bienvenue dans ton parcours d'apprentissage complet pour maîtriser l'IA agentiq
 et l'appliquer concrètement au cycle de vie logiciel (tickets, développement, tests,
 CI/CD, MCP).
 
-> **Public visé** : développeur·se à l'aise en Python, débutant·e en IA agentique
-> (utilisation en mode chat uniquement pour l'instant).
+> **Public visé** : développeur·se à l'aise en Python, débutant·e en IA agentique.
 > **Outils pratiqués** : GitHub Copilot (chat, agent mode, coding agent, CLI) et Claude / Claude Code.
 
 ---
 
 ## 🧭 Comment suivre ce parcours
 
-1. Suis les modules **dans l'ordre** (0 → 6). Chaque module a un `README.md` avec la théorie,
-   des exemples, et des exercices.
-2. Fais les **TPs** du Module 4 au fur et à mesure : ils sont progressifs.
-3. À la fin de chaque module, tu trouveras une section **✅ Auto-évaluation** pour vérifier tes acquis.
-4. Prends des notes dans le dossier `notes/`.
+1. Suis les modules **dans l'ordre** (0 → 6).
+2. Fais les **TPs** du Module 4 au fur et à mesure.
+3. Utilise la section **✅ Auto-évaluation** à la fin de chaque module.
+4. Prends des notes dans `notes/`.
 
-**Durée estimée** : 6 à 10 semaines à raison de quelques heures par semaine (adaptable).
+**Durée estimée** : 6 à 10 semaines (adaptable).
 
 ---
 
@@ -36,50 +34,11 @@ CI/CD, MCP).
 
 ---
 
-## 🗺️ Vue d'ensemble des concepts couverts
-
-### Fondations (les bases)
-- Fonctionnement d'un LLM (tokens, embeddings, attention — niveau intuitif)
-- Fenêtre de contexte, température, top-p
-- **Tarification** : facturation input/output tokens, estimation de coûts
-- Notion de **Plan** (raisonnement, décomposition de tâches)
-- Techniques de prompting (zero-shot, few-shot, chain-of-thought)
-
-### Agentique (le cœur)
-- Différence LLM vs assistant vs **agent**
-- La boucle agentique (ReAct)
-- **Tools / Function calling**
-- **Mémoire** et **RAG**
-- **Sous-agents** et orchestration multi-agents
-- **MCP** (Model Context Protocol)
-
-### Pratique & industrialisation
-- Utilisation en **CLI**
-- Créer ses propres **agents / skills**
-- Faire tourner des **sous-agents**
-- **Industrialiser et partager** un agent
-
-### Application à l'ingénierie logicielle
-- Création automatisée de **tickets / issues**
-- **Développement** assisté par agents
-- Génération de **tests unitaires**
-- **CI/CD** avec agents (GitHub Actions)
-- Connexion aux outils internes via **MCP**
-
-### Transverse
-- **Sécurité** (prompt injection, secrets, permissions)
-- **Évaluation** (evals) et fiabilité
-- **Optimisation des coûts**
-- **Gouvernance** (human-in-the-loop)
-- **Observabilité** (tracing, logging)
-
----
-
 ## ✅ Prérequis techniques
 
 - Python 3.10+
-- Un compte GitHub avec accès à **GitHub Copilot**
-- Un accès à **Claude** (web et/ou API Anthropic)
+- Compte GitHub avec **GitHub Copilot**
+- Accès à **Claude** (web et/ou API Anthropic)
 - Git et un IDE (VS Code recommandé)
 
 ---
@@ -88,7 +47,7 @@ CI/CD, MCP).
 
 ```
 ia_formation/
-├���─ README.md                  ← tu es ici
+├── README.md
 ├── module-0-fondations/
 ├── module-1-agents/
 ├── module-2-mcp/
