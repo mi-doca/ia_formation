@@ -1,0 +1,14 @@
+# SDK Anthropic pour les exemples d'agents et de function calling
+anthropic>=0.34.0
+
+# SDK OpenAI pour comparer les patterns d'outils et d'agents
+openai>=1.40.0
+
+# SDK MCP pour construire un serveur MCP custom dans les TPs
+mcp>=1.0.0
+
+# Requêtes HTTP simples pour les démos d'intégration
+requests>=2.32.0
+
+# Tests Python des exemples et TPs
+pytest>=8.2.0
