@@ -1,62 +1,106 @@
-# 🎓 Parcours "Expert IA Agentique pour l'Ingénierie Logicielle"
+# 🎓 Parcours "Expert en IA agentique pour l'ingénierie logicielle"
 
-Bienvenue dans ton parcours d'apprentissage complet pour maîtriser l'IA agentique
-et l'appliquer concrètement au cycle de vie logiciel (tickets, développement, tests,
-CI/CD, MCP).
+Bienvenue dans un parcours progressif, pratique et entièrement **en français** pour
+passer d'un usage "chat dans l'IDE" à une vraie maîtrise de l'**IA agentique**
+appliquée au développement logiciel.
 
-> **Public visé** : développeur·se à l'aise en Python, débutant·e en IA agentique.
-> **Outils pratiqués** : GitHub Copilot (chat, agent mode, coding agent, CLI) et Claude / Claude Code.
+> **Public visé** : développeur·se à l'aise en Python, débutant·e en IA agentique.  
+> **Outils fil rouge** : GitHub Copilot, Claude / Claude Code, API Anthropic, un peu d'OpenAI pour comparer les approches.  
+> **Philosophie** : comprendre les concepts, pratiquer vite, puis industrialiser.
+
+---
+
+## 🎯 Objectifs du parcours
+
+À la fin de ce dépôt, tu sauras :
+
+- expliquer clairement comment fonctionne un LLM sans entrer dans des maths lourdes ;
+- distinguer **LLM**, **assistant**, **agent**, **tool**, **MCP**, **RAG** et **sous-agent** ;
+- utiliser GitHub Copilot et Claude en mode **CLI**, **agent** et **API** ;
+- concevoir des agents fiables pour coder, tester, documenter, créer des tickets et piloter des workflows ;
+- raisonner en coût, sécurité, évaluation, gouvernance et observabilité.
 
 ---
 
 ## 🧭 Comment suivre ce parcours
 
-1. Suis les modules **dans l'ordre** (0 → 6).
-2. Fais les **TPs** du Module 4 au fur et à mesure.
+1. Commence par le **Module 0** et avance dans l'ordre.
+2. Fais les **TPs du Module 4** dès que tu termines les modules 1 à 3.
 3. Utilise la section **✅ Auto-évaluation** à la fin de chaque module.
-4. Prends des notes dans `notes/`.
+4. Garde le dossier [`notes/`](./notes/README.md) pour tes notes personnelles.
+5. Reviens régulièrement au [`glossaire`](./ressources/glossaire.md) et à la [`cheatsheet prompting`](./ressources/cheatsheet-prompting.md).
 
-**Durée estimée** : 6 à 10 semaines (adaptable).
-
----
-
-## 📚 Sommaire des modules
-
-| # | Module | Contenu | Statut |
-|---|--------|---------|--------|
-| 0 | [Fondations de l'IA générative](./module-0-fondations/) | LLM, tokens, contexte, tarification, prompting | ✅ Prêt |
-| 1 | [Anatomie d'un agent](./module-1-agents/) | Boucle agentique, ReAct, tools, mémoire, RAG, sous-agents | ✅ Prêt |
-| 2 | [Le protocole MCP](./module-2-mcp/) | Model Context Protocol, serveurs, clients, tools | ✅ Prêt |
-| 3 | [Utilisation en CLI](./module-3-cli/) | `gh copilot`, Claude Code, automatisation terminal | ✅ Prêt |
-| 4 | [TPs pratiques](./module-4-tps/) | Créer agents, skills, sous-agents, serveur MCP, industrialisation | ✅ Prêt |
-| 5 | [IA dans le cycle logiciel](./module-5-sdlc/) | Tickets, dev, tests, CI/CD, MCP en production | ✅ Prêt |
-| 6 | [Sujets avancés](./module-6-avance/) | Sécurité, evals, coûts, gouvernance, observabilité | ✅ Prêt |
+**Durée indicative** : 6 à 10 semaines selon ton rythme et la profondeur de pratique.
 
 ---
 
-## ✅ Prérequis techniques
+## ✅ Prérequis
 
 - Python 3.10+
-- Compte GitHub avec **GitHub Copilot**
-- Accès à **Claude** (web et/ou API Anthropic)
-- Git et un IDE (VS Code recommandé)
+- Git et GitHub
+- Un IDE avec GitHub Copilot
+- Un accès à Claude (web, Desktop, CLI ou API Anthropic)
+- Envie de pratiquer sur de vrais cas d'ingénierie logicielle
+
+---
+
+## 📚 Sommaire du parcours
+
+| # | Module | Ce que tu y apprends |
+|---|--------|----------------------|
+| 0 | [Fondations de l'IA générative](./module-0-fondations/README.md) | LLM, tokens, contexte, température, top-p, tarification, plans, prompting |
+| 1 | [Anatomie d'un agent](./module-1-agents/README.md) | Boucle agentique, ReAct, tools, mémoire, RAG, sous-agents |
+| 2 | [Le protocole MCP](./module-2-mcp/README.md) | Architecture MCP, serveurs, clients, resources, prompts, tools |
+| 3 | [Utilisation en CLI](./module-3-cli/README.md) | `gh copilot`, Claude Code, scripts et automatisation terminal |
+| 4 | [TPs pratiques](./module-4-tps/README.md) | 5 ateliers complets avec code de départ et corrigés |
+| 5 | [IA dans le cycle de vie logiciel](./module-5-sdlc/README.md) | Tickets, dev, tests, CI/CD, outillage interne |
+| 6 | [Sujets avancés & bonnes pratiques](./module-6-avance/README.md) | Sécurité, evals, coûts, gouvernance, observabilité |
+
+---
+
+## 🛠️ Ressources transverses
+
+- [`ressources/glossaire.md`](./ressources/glossaire.md)
+- [`ressources/liens-utiles.md`](./ressources/liens-utiles.md)
+- [`ressources/cheatsheet-prompting.md`](./ressources/cheatsheet-prompting.md)
+- [`requirements.txt`](./requirements.txt) pour installer les dépendances utiles aux TPs
 
 ---
 
 ## 📁 Structure du dépôt
 
-```
+```text
 ia_formation/
 ├── README.md
-├── module-0-fondations/
-├── module-1-agents/
-├── module-2-mcp/
-├── module-3-cli/
+├── module-0-fondations/README.md
+├── module-1-agents/README.md
+├── module-2-mcp/README.md
+├── module-3-cli/README.md
 ├── module-4-tps/
-├── module-5-sdlc/
-├── module-6-avance/
-├── notes/
-└── ressources/
+│   ├── README.md
+│   ├── tp1/
+│   ├── tp2/
+│   ├── tp3/
+│   ├── tp4/
+│   └── tp5/
+├── module-5-sdlc/README.md
+├── module-6-avance/README.md
+├── ressources/
+│   ├── glossaire.md
+│   ├── liens-utiles.md
+│   └── cheatsheet-prompting.md
+├── requirements.txt
+├── .gitignore
+└── notes/README.md
 ```
 
-Bon apprentissage ! 🚀
+---
+
+## 🚀 Conseils pour bien progresser
+
+- Lis les notions, puis **reformule-les avec tes mots**.
+- Quand un concept te semble flou, crée un mini script Python pour le tester.
+- Privilégie des agents **simples, traçables et testables** avant de viser des orchestrations complexes.
+- Compare souvent : *ce que ferait un simple prompt* vs *ce qu'apporte réellement un agent*.
+
+Bon apprentissage !
