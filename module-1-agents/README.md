@@ -19,6 +19,18 @@
 
 ---
 
+## 🔍 Aller plus loin : comment un agent fonctionne dans le détail
+
+> Tu te demandes comment un modèle qui "prédit du texte" produit des raisonnements aussi
+> poussés ? Ou comment il "se souvient" de tes corrections ?
+>
+> → Consulte le document dédié : **[Fonctionnement détaillé d'un agent](./fonctionnement-detaille.md)**
+>
+> Il couvre : LLM stateless, mémoire par historique, trace pas à pas d'un tour agentique,
+> exemple Python exécutable et démystification des idées reçues.
+
+---
+
 ## 1. LLM vs assistant vs agent
 
 | Niveau | Définition | Exemple |
@@ -269,3 +281,10 @@ print(retrieve("mcp"))
 ## ➡️ Module suivant
 
 Passe au [Module 2 — Le protocole MCP](../module-2-mcp/README.md).
+
+---
+
+## 📌 Ressources complémentaires de ce module
+
+- [Fonctionnement détaillé d'un agent](./fonctionnement-detaille.md) — LLM stateless, mémoire, trace d'un tour agentique
+- [Exemple Python : boucle agentique](./exemples/boucle_agentique.py) — code exécutable qui logge le contexte

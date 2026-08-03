@@ -60,3 +60,7 @@ python module-4-tps/tp5/corrige/src/agent_factory/cli.py scaffold --name reviewe
 ## ➡️ Suite
 
 Reviens au [Module 5 — IA dans le cycle de vie logiciel](../../module-5-sdlc/README.md).
+
+> 💡 **Pour aller plus loin sur le partage d'agents** : consulte le guide complet
+> [Partager un agent avec son équipe](../../module-5-sdlc/partager-un-agent.md)
+> qui couvre GitHub Copilot, Claude Code, skills isolées et guide pas à pas reproductible.

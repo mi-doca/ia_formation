@@ -186,3 +186,9 @@ La valeur ne vient pas d'un super-agent unique, mais de l'**enchaînement maîtr
 ## ➡️ Module suivant
 
 Passe au [Module 6 — Sujets avancés & bonnes pratiques](../module-6-avance/README.md).
+
+---
+
+## 📌 Ressources complémentaires de ce module
+
+- [Partager un agent avec son équipe](./partager-un-agent.md) — Copilot, Claude, skills, guide pas à pas
