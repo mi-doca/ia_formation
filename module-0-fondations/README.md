@@ -338,3 +338,7 @@ if __name__ == "__main__":
 ## ➡️ Module suivant
 
 Passe au [Module 1 — Anatomie d'un agent](../module-1-agents/README.md).
+
+> 💡 **Curiosité ?** Si tu veux comprendre dès maintenant pourquoi un LLM stateless
+> donne l'illusion de mémoire, consulte la section dédiée du Module 1 :
+> [Fonctionnement détaillé d'un agent](../module-1-agents/fonctionnement-detaille.md).
