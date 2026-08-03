@@ -288,3 +288,9 @@ Passe au [Module 2 — Le protocole MCP](../module-2-mcp/README.md).
 
 - [Fonctionnement détaillé d'un agent](./fonctionnement-detaille.md) — LLM stateless, mémoire, trace d'un tour agentique
 - [Exemple Python : boucle agentique](./exemples/boucle_agentique.py) — code exécutable qui logge le contexte
+
+---
+
+## ⬅️ Module précédent
+
+Revenir au [Module 0 — Fondations](../module-0-fondations/README.md).

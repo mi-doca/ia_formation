@@ -213,3 +213,9 @@ Tu réduis ainsi le risque et le bruit contextuel.
 ## ➡️ Module suivant
 
 Passe au [Module 3 — Utilisation en CLI](../module-3-cli/README.md).
+
+---
+
+## ⬅️ Module précédent
+
+Revenir au [Module 1 — Anatomie d'un agent](../module-1-agents/README.md).

@@ -186,3 +186,9 @@ Contraintes : réponse courte, structurée, citer les fichiers.
 ## ➡️ Module suivant
 
 Passe au [Module 4 — TPs pratiques](../module-4-tps/README.md).
+
+---
+
+## ⬅️ Module précédent
+
+Revenir au [Module 2 — Le protocole MCP](../module-2-mcp/README.md).

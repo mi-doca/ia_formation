@@ -5,6 +5,7 @@
 | **Agent** | Système piloté par un LLM capable de planifier, appeler des tools et boucler jusqu'à un objectif. |
 | **Attention** | Mécanisme qui aide le modèle à pondérer les parties les plus pertinentes du contexte. |
 | **Chain-of-Thought** | Raisonnement étape par étape, parfois explicite, parfois gardé en interne selon l'outil. |
+| **CI/CD** | Continuous Integration / Continuous Deployment : pipeline automatisé qui construit, teste et déploie le code à chaque changement. |
 | **Context window** | Volume maximal de tokens visibles en une fois par le modèle. |
 | **Contexte (liste de messages)** | L'ensemble des messages (system, user, assistant, tool) renvoyés au modèle à chaque tour. C'est ce contexte qui donne l'illusion de mémoire. |
 | **Embedding** | Représentation vectorielle d'un texte utilisée pour comparer la similarité sémantique. |
@@ -26,6 +27,7 @@
 | **RAG** | Retrieval Augmented Generation : récupération de contexte externe avant génération. |
 | **ReAct** | Pattern agentique alternant raisonnement et action. |
 | **Resource** | Donnée ou document exposé par un serveur MCP. |
+| **SDLC** | Software Development Lifecycle : ensemble des étapes du cycle de vie d'un logiciel (spécification, développement, tests, déploiement, maintenance). |
 | **Skill / custom agent** | Agent ou jeu d'instructions réutilisable pour une tâche spécialisée. |
 | **Sous-agent** | Agent spécialisé appelé par un agent superviseur. |
 | **Stateless** | Sans état. Un LLM est stateless : il ne conserve aucune information entre deux appels API. La "mémoire" vient de l'historique renvoyé dans le contexte. |

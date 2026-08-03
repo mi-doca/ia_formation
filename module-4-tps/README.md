@@ -76,3 +76,9 @@ python module-4-tps/tp5/corrige/src/agent_factory/cli.py scaffold --name reviewe
 ## ➡️ Module suivant
 
 Après les TPs, poursuis avec [Module 5 — IA dans le cycle de vie logiciel](../module-5-sdlc/README.md).
+
+---
+
+## ⬅️ Module précédent
+
+Revenir au [Module 3 — Utilisation en CLI](../module-3-cli/README.md).
