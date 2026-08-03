@@ -168,3 +168,9 @@ Sans traces, tu ne sauras pas pourquoi un agent a réussi… ou échoué.
 - Refaire les [TPs du module 4](../module-4-tps/README.md) avec tes propres cas métier.
 - Créer un premier serveur MCP relié à un outil interne en lecture seule.
 - Construire une mini suite d'evals sur un usage réel de ton équipe.
+
+---
+
+## ⬅️ Module précédent
+
+Revenir au [Module 5 — IA dans le cycle de vie logiciel](../module-5-sdlc/README.md).

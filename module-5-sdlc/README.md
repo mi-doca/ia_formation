@@ -192,3 +192,9 @@ Passe au [Module 6 — Sujets avancés & bonnes pratiques](../module-6-avance/RE
 ## 📌 Ressources complémentaires de ce module
 
 - [Partager un agent avec son équipe](./partager-un-agent.md) — Copilot, Claude, skills, guide pas à pas
+
+---
+
+## ⬅️ Module précédent
+
+Revenir au [Module 4 — TPs pratiques](../module-4-tps/README.md).

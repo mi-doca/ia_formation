@@ -32,6 +32,8 @@ appliquée au développement logiciel.
 
 **Durée indicative** : 6 à 10 semaines selon ton rythme et la profondeur de pratique.
 
+📅 **Voir le [Plan de progression semaine par semaine](./PARCOURS.md)** — checklists de suivi incluses.
+
 ---
 
 ## ✅ Prérequis
@@ -60,6 +62,7 @@ appliquée au développement logiciel.
 
 ## 🛠️ Ressources transverses
 
+- [`PARCOURS.md`](./PARCOURS.md) — plan de progression semaine par semaine avec checklists
 - [`ressources/glossaire.md`](./ressources/glossaire.md)
 - [`ressources/liens-utiles.md`](./ressources/liens-utiles.md)
 - [`ressources/cheatsheet-prompting.md`](./ressources/cheatsheet-prompting.md)
@@ -72,6 +75,7 @@ appliquée au développement logiciel.
 ```text
 ia_formation/
 ├── README.md
+├── PARCOURS.md                               ← plan semaine par semaine avec checklists
 ├── module-0-fondations/README.md
 ├── module-1-agents/
 │   ├── README.md
