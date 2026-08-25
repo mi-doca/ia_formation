@@ -69,6 +69,18 @@ Tu peux voir cela comme une chaîne d'interprétation :
 2. au milieu, il capte des relations, des intentions, des structures ;
 3. à la fin, il transforme cela en choix de continuation possible.
 
+### Réseau de neurones : l'image mentale utile
+
+Une bonne analogie est celle d'une **chaîne d'ateliers** :
+
+- le premier atelier reçoit des morceaux de texte déjà transformés en nombres ;
+- le suivant repère des motifs simples ;
+- les suivants combinent ces motifs pour produire une lecture plus riche du contexte ;
+- le dernier atelier prépare la décision : **quel token a le plus de chances de venir maintenant ?**
+
+Chaque couche ne "comprend" pas toute seule la phrase complète.
+Elle fait une petite partie du travail, puis transmet une représentation un peu plus utile à la couche suivante.
+
 ### Entraînement, pré-entraînement et fine-tuning
 
 Un LLM ne naît pas "sachant" répondre. Il est entraîné en plusieurs phases.
@@ -104,13 +116,57 @@ Ensuite, on peut spécialiser le modèle pour mieux répondre à certains usages
 Le **pré-entraînement** donne une base générale.
 Le **fine-tuning** ajuste le comportement pour un usage plus précis.
 
-### Embeddings, Transformer et attention, sans maths lourdes
+### Embeddings, vecteurs, Transformer et attention, sans maths lourdes
 
-- Un **embedding** transforme un texte en coordonnées numériques qui capturent du sens.
-  Deux phrases proches en sens auront souvent des vecteurs proches.
-- Le **Transformer** est l'architecture qui permet au modèle d'analyser tous les tokens du contexte ensemble, plutôt qu'un par un de manière rigide.
-- L'**attention** permet au modèle de décider quelles parties du contexte regarder plus
-  fortement pour produire le prochain token.
+Avant de parler de génération, il faut bien distinguer trois niveaux :
+
+| Niveau | Ce que c'est | Exemple d'intuition |
+|--------|---------------|---------------------|
+| **Token** | Le morceau de texte manipulé par le tokenizer | `LLM`, ` comprendre`, `.` |
+| **Embedding** | Le premier vecteur associé à ce token | une fiche numérique de départ pour `LLM` |
+| **Représentation interne** | Le vecteur transformé ensuite par les couches du modèle | une version enrichie de `LLM`, comprise dans son contexte |
+
+#### Qu'est-ce qu'un vecteur ici ?
+
+Dans ce contexte, un **vecteur** est simplement une **liste de nombres**.
+
+Par exemple, on peut l'imaginer comme ceci :
+
+```text
+[0.12, -0.44, 1.03, ...]
+```
+
+Un humain ne lit pas cette liste directement. En revanche, le modèle a appris que certaines combinaisons de nombres sont utiles pour représenter :
+
+- des ressemblances de forme ;
+- des usages fréquents ;
+- des proximités de sens ;
+- des indices grammaticaux ou thématiques.
+
+Pourquoi transformer un token en liste de nombres ?
+
+- parce qu'un ordinateur calcule sur des nombres ;
+- parce qu'une liste de nombres peut être transformée par les couches du réseau ;
+- parce qu'on peut placer les tokens dans un espace où les ressemblances deviennent exploitables.
+
+#### L'intuition de proximité sémantique
+
+Dans cet espace vectoriel, deux tokens ou deux expressions proches en sens ont souvent des vecteurs relativement proches.
+
+Exemples intuitifs :
+
+- `chat` et `chien` : proches, car souvent utilisés dans des contextes similaires ;
+- `voiture` et `automobile` : très proches ;
+- `voiture` et `salade` : nettement moins proches.
+
+Attention : cela ne veut pas dire qu'un vecteur "contient" la définition complète d'un mot.
+Cela veut dire qu'il place ce mot dans un espace numérique où le modèle peut exploiter les régularités apprises.
+
+#### Pourquoi parler ensuite du Transformer ?
+
+- L'**embedding** est seulement le point de départ ;
+- le **Transformer** est l'architecture qui transforme ces vecteurs couche après couche ;
+- l'**attention** permet à chaque token de pondérer les autres tokens du contexte pour produire une représentation plus utile.
 
 > Idée clé : le LLM ne relit pas "également" tout ton prompt. Il pondère ce qui semble
 > pertinent à chaque étape de génération.
@@ -170,7 +226,7 @@ L'idée importante est la suivante :
 
 ### Étape 2 — Conversion en embeddings
 
-Chaque token est transformé en **embedding**, c'est-à-dire en représentation numérique.
+Chaque token est transformé en **embedding**, c'est-à-dire en première représentation numérique.
 
 Le modèle ne "voit" pas :
 
@@ -190,26 +246,55 @@ Tu peux imaginer chaque embedding comme une fiche d'identité numérique d'un to
 - un peu de son usage ;
 - un peu de son sens probable.
 
+Important :
+
+- le **token** est le morceau de texte ;
+- l'**embedding** est son vecteur de départ ;
+- la **représentation interne** est ce vecteur après passage dans plusieurs couches.
+
+Autrement dit, `LLM` n'a pas qu'une seule représentation figée.
+Au fil des couches, sa représentation change pour intégrer le fait qu'ici, il apparaît dans une question pédagogique sur le fonctionnement d'un modèle.
+
 ### Étape 3 — Passage dans le Transformer
 
 Les embeddings passent ensuite dans les couches du **Transformer**.
 
-Le rôle du Transformer est de construire progressivement une meilleure compréhension du contexte courant :
+Le rôle du Transformer est de construire progressivement une meilleure compréhension du contexte courant.
+
+On peut imaginer une succession de couches qui se posent, chacune à leur manière, des questions du type :
+
+- "Quels tokens vont ensemble ?"
+- "Quel est le sujet principal ?"
+- "S'agit-il d'une question, d'un ordre, d'une explication ?"
+- "Quels mots modifient ou précisent les autres ?"
+
+Au fil des couches, la représentation interne devient plus contextuelle :
 
 - `comprendre` signale une demande d'explication ;
 - `comment fonctionne` signale une attente de mécanisme ;
 - `LLM` indique le sujet technique ;
 - l'ensemble de la phrase ressemble à une demande pédagogique.
 
-### Étape 4 — Attention sur les parties importantes
+Le Transformer ne traite donc pas seulement des mots isolés.
+Il transforme des **relations entre tokens**.
+
+### Étape 4 — Self-attention sur les parties importantes
 
 Le mécanisme d'**attention** aide le modèle à déterminer quels tokens sont les plus utiles pour prédire la suite.
 
-Dans notre exemple, au moment de commencer la réponse, il peut accorder beaucoup d'importance à :
+La **self-attention** veut dire qu'un token peut "regarder" les autres tokens du même contexte pour savoir lesquels comptent le plus.
+
+Dans notre exemple, au moment de construire une représentation utile pour répondre, le modèle peut accorder beaucoup d'importance à :
 
 - `comprendre`
 - `fonctionne`
 - `LLM`
+
+On peut raconter la scène ainsi :
+
+- le token lié à `fonctionne` "regarde" `comment`, car ils forment ensemble une demande de mécanisme ;
+- le token lié à `LLM` attire l'attention, car il indique le sujet central ;
+- les autres tokens aident à préciser le ton et la structure de la demande.
 
 Intuition : si tu réponds à cette phrase, tu ne donnes pas le même type de réponse que pour :
 
@@ -223,6 +308,17 @@ Le modèle "voit" donc que la bonne continuation ressemble probablement à :
 - en français ;
 - orientée débutant si le contexte va dans ce sens.
 
+Pourquoi est-ce si utile ?
+
+Parce que l'information importante n'est pas toujours juste à côté.
+L'attention aide le modèle à relier des éléments éloignés dans la séquence, par exemple :
+
+- un sujet annoncé au début ;
+- une précision ajoutée plus loin ;
+- une contrainte de ton ou de format présente encore ailleurs dans le prompt.
+
+Sans ce mécanisme, il serait beaucoup plus difficile de garder une vue d'ensemble sur une longue phrase ou un long contexte.
+
 ### Étape 5 — Prédiction du prochain token
 
 À la fin de ce premier passage, le modèle ne sort pas encore toute la réponse.
@@ -230,19 +326,28 @@ Il calcule d'abord :
 
 > **quel est le prochain token le plus plausible ?**
 
+En sortie, il produit une **distribution de probabilités** : une liste de tokens possibles avec un score de plausibilité pour chacun.
+
 Exemple fictif de candidats possibles :
 
-| Token candidat | Intuition |
-|----------------|-----------|
-| `Un` | bonne ouverture pour une définition |
-| `Pour` | bonne ouverture pour une explication pédagogique |
-| `Bien` | possible si le ton est conversationnel |
+| Token candidat | Probabilité fictive | Intuition |
+|----------------|---------------------|-----------|
+| `Un` | 42 % | bonne ouverture pour une définition |
+| `Pour` | 27 % | bonne ouverture pour une explication pédagogique |
+| `Bien` | 11 % | possible si le ton est conversationnel |
+| `En` | 8 % | possible pour introduire une réponse structurée |
+| autres | 12 % | options moins cohérentes ici |
 
 Il choisit un token selon :
 
 - les probabilités calculées ;
 - les paramètres comme la **température** ;
 - les éventuelles contraintes du système.
+
+Deux grands styles de choix sont courants :
+
+- **greedy / déterministe** : on prend le token le plus probable ;
+- **sampling / décodage probabiliste** : on tire un token parmi les plus plausibles, pour garder un peu de variété.
 
 Supposons qu'il choisisse :
 
@@ -288,6 +393,12 @@ Et ainsi de suite, jusqu'à obtenir quelque chose comme :
 Un LLM est un modèle de langage entraîné à prédire le token suivant...
 ```
 
+Le point essentiel est le suivant :
+
+- à chaque tour, le modèle recalcule une nouvelle distribution de probabilités ;
+- le contexte a légèrement changé, car un token de plus a été ajouté ;
+- le prochain choix dépend donc de tout ce qui précède, y compris de ce qu'il vient lui-même de générer.
+
 ### Étape 7 — Construction progressive d'une réponse cohérente
 
 La réponse finale est donc construite **petit morceau par petit morceau**.
@@ -299,6 +410,15 @@ Il avance itérativement :
 2. il propose le prochain token ;
 3. il ajoute ce token au contexte ;
 4. il recommence.
+
+On peut résumer le trajet interne ainsi :
+
+1. **texte** → morceaux de texte ;
+2. **tokens** → vecteurs de départ ;
+3. **couches du réseau** → représentations internes de plus en plus riches ;
+4. **attention** → mise en avant des liens utiles ;
+5. **distribution de probabilités** → choix du prochain token ;
+6. **boucle de décodage** → génération de la réponse complète.
 
 ### Mini schéma mental
 
