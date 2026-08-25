@@ -53,7 +53,7 @@ appliquée au développement logiciel.
 | 0 | [Fondations de l'IA générative](./module-0-fondations/README.md) | LLM, tokens, contexte, température, top-p, tarification, plans, prompting |
 | 1 | [Anatomie d'un agent](./module-1-agents/README.md) | Boucle agentique, ReAct, tools, mémoire, RAG, sous-agents — **+ [fonctionnement détaillé](./module-1-agents/fonctionnement-detaille.md)** |
 | 2 | [Le protocole MCP](./module-2-mcp/README.md) | Architecture MCP, serveurs, clients, resources, prompts, tools |
-| 3 | [Utilisation en CLI](./module-3-cli/README.md) | `gh copilot`, Claude Code, scripts et automatisation terminal |
+| 3 | [Utilisation en CLI](./module-3-cli/README.md) | `gh copilot`, Claude Code, **[OpenCode](./module-3-cli/opencode.md)**, scripts et automatisation terminal |
 | 4 | [TPs pratiques](./module-4-tps/README.md) | 5 ateliers complets avec code de départ et corrigés |
 | 5 | [IA dans le cycle de vie logiciel](./module-5-sdlc/README.md) | Tickets, dev, tests, CI/CD, outillage interne — **+ [partager un agent](./module-5-sdlc/partager-un-agent.md)** |
 | 6 | [Sujets avancés & bonnes pratiques](./module-6-avance/README.md) | Sécurité, evals, coûts, gouvernance, observabilité |
@@ -82,7 +82,9 @@ ia_formation/
 │   ├── fonctionnement-detaille.md        ← mémoire, trace d'un tour, idées reçues
 │   └── exemples/boucle_agentique.py      ← code Python exécutable
 ├── module-2-mcp/README.md
-├── module-3-cli/README.md
+├── module-3-cli/
+│   ├── README.md
+│   └── opencode.md                           ← intro, workflow pas à pas, comparatif CLI
 ├── module-4-tps/
 │   ├── README.md
 │   ├── tp1/

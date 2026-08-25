@@ -19,6 +19,7 @@
 | **MCP** | Model Context Protocol, protocole standard pour connecter clients et serveurs d'outils/resources/prompts. |
 | **Mémoire court terme** | Informations présentes dans le contexte actif de la session. |
 | **Mémoire long terme** | Informations stockées dans un système externe : base, wiki, vector store, fichiers, etc. |
+| **OpenCode** | Agent CLI open source permettant de piloter un LLM depuis le terminal pour explorer, modifier et tester un dépôt, agnostique au fournisseur de modèle. |
 | **Plan** | Décomposition explicite d'une tâche en étapes ordonnées. |
 | **Prompt** | Texte ou message envoyé au modèle pour cadrer la génération. |
 | **Prompt caching** | Réutilisation partielle d'un prompt déjà traité pour réduire coûts et latence quand le fournisseur le permet. |
