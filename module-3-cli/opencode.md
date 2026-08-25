@@ -51,8 +51,8 @@ et sans secret en dur. Exemple illustratif :
 
 ```json
 {
-  "provider": "anthropic",
-  "model": "claude-sonnet"
+  "provider": "<ton-provider>",
+  "model": "<ton-modele>"
 }
 ```
 
@@ -60,7 +60,7 @@ Les clés API sont à passer via des **variables d'environnement** (jamais en du
 fichier) :
 
 ```bash
-export ANTHROPIC_API_KEY="ta-clé-api"
+export <PROVIDER>_API_KEY="ta-cle-api"
 ```
 
 ---

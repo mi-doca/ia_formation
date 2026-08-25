@@ -45,6 +45,7 @@ Adapte-le à ton rythme : le parcours reste valide si tu le fais en 6 ou en 10 s
   - [ ] Lire l'exemple de serveur MCP minimal
   - [ ] Compléter l'auto-évaluation du Module 2
 - [ ] Lire [Module 3 — Utilisation en CLI](./module-3-cli/README.md)
+  - [ ] Lire la section dédiée [OpenCode](./module-3-cli/opencode.md)
   - [ ] Tester `gh copilot suggest` et `gh copilot explain` avec un exemple réel
   - [ ] Tester OpenCode sur un dépôt : question, modification ciblée, vérification du diff puis des tests
   - [ ] Compléter l'auto-évaluation du Module 3
