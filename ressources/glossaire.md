@@ -8,6 +8,7 @@
 | **CI/CD** | Continuous Integration / Continuous Deployment : pipeline automatisé qui construit, teste et déploie le code à chaque changement. |
 | **Context window / fenêtre de contexte** | Portion de tokens effectivement visible par le modèle à un instant donné, limitée par la taille maximale de fenêtre. |
 | **Contexte (liste de messages)** | L'ensemble des messages (system, user, assistant, tool) renvoyés au modèle à chaque tour. C'est ce contexte qui donne l'illusion de mémoire. |
+| **Contexte conversationnel** | L'historique d'un échange (questions, réponses, instructions) que le modèle reçoit à chaque appel pour donner l'illusion d'une conversation continue. |
 | **Distribution de probabilité** | Répartition des probabilités calculées par le modèle sur les tokens possibles au prochain pas de génération. |
 | **Embedding** | Vecteur numérique représentant un token ou un texte. Capture des proximités de sens : deux tokens proches en signification ont souvent des embeddings proches. |
 | **Eval** | Évaluation mesurée d'un agent ou d'un prompt sur un ensemble de cas. |
@@ -18,6 +19,7 @@
 | **Human-in-the-loop** | Validation humaine à une étape clé d'un workflow automatisé. |
 | **Inférence** | Moment où l'on utilise le modèle entraîné pour produire une réponse à partir d'un prompt. |
 | **Instructions file** | Fichier `.instructions.md` dans un repo Copilot définissant des instructions qui s'appliquent automatiquement à un contexte de fichiers. |
+| **Instruction (system)** | Consigne donnée au modèle dans le system prompt pour orienter son comportement : ton, restrictions, style de réponse, conditions de clarification. |
 | **LLM** | Modèle de langage de grande taille, spécialisé dans la prédiction du prochain token. |
 | **MCP** | Model Context Protocol, protocole standard pour connecter clients et serveurs d'outils/resources/prompts. |
 | **Mémoire court terme** | Informations présentes dans le contexte actif de la session. |
@@ -39,9 +41,12 @@
 | **Skill / custom agent** | Agent ou jeu d'instructions réutilisable pour une tâche spécialisée. |
 | **Sous-agent** | Agent spécialisé appelé par un agent superviseur. |
 | **Stateless** | Sans état. Un LLM est stateless : il ne conserve aucune information entre deux appels API. La "mémoire" vient de l'historique renvoyé dans le contexte. |
+| **Stop sequence** | Chaîne de texte définie par l'application : dès qu'elle apparaît dans la réponse générée, la génération s'arrête immédiatement. |
+| **Stop token** | Token spécial (ex. `<\|end_of_turn\|>`) que le modèle a appris à prédire pour signaler la fin d'une réponse. Quand il le produit, la génération s'arrête. |
 | **System prompt** | Consigne de plus haut niveau qui fixe rôle, ton et contraintes. |
 | **Température** | Paramètre contrôlant le niveau de variabilité des réponses. |
 | **Token** | Unité de texte traitée par le modèle ; ce n'est pas toujours un mot complet. Un mot peut correspondre à un ou plusieurs tokens. |
+| **Max tokens** | Paramètre fixé par l'application qui limite le nombre de tokens que le modèle peut générer dans une réponse. Si atteint, la génération s'arrête même si la réponse semble incomplète. |
 | **Tool result** | Résultat renvoyé par l'exécution d'un tool, ajouté au contexte pour que le modèle puisse observer ce qui s'est passé. |
 | **Top-p** | Paramètre de sampling qui limite la masse de probabilité considérée pour choisir le prochain token. |
 | **Tool** | Action exécutable par un agent : lire un fichier, lancer un test, appeler une API, etc. |
