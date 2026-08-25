@@ -15,6 +15,12 @@
 - Tool use : <https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview>
 - Claude Code : <https://docs.anthropic.com/en/docs/claude-code/overview>
 
+## OpenCode
+
+- Site officiel : <https://opencode.ai/>
+- Documentation : <https://opencode.ai/docs>
+- Package npm : <https://www.npmjs.com/package/opencode-ai>
+
 ## MCP
 
 - Site / spécification : <https://modelcontextprotocol.io/>
