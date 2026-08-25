@@ -165,6 +165,9 @@ Exemples intuitifs :
 > ➡️ Pour aller plus loin sans maths lourdes, lis la
 > [section 1b — Fonctionnement interne : du texte aux probabilités](#1b-fonctionnement-interne--du-texte-aux-probabilités).
 
+> ➡️ Pour une explication approfondie de ces mécanismes avec des analogies concrètes,
+> consulte la section [1b. Sous le capot : vecteurs, réseau de neurones, Transformer et attention](#1b-sous-le-capot--vecteurs-réseau-de-neurones-transformer-et-attention).
+
 ### Modèle, prompt, contexte, réponse : bien distinguer les rôles
 
 | Élément | Rôle |
