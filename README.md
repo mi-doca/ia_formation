@@ -5,7 +5,7 @@ passer d'un usage "chat dans l'IDE" à une vraie maîtrise de l'**IA agentique**
 appliquée au développement logiciel.
 
 > **Public visé** : développeur·se à l'aise en Python, débutant·e en IA agentique.  
-> **Outils fil rouge** : GitHub Copilot, Claude / Claude Code, API Anthropic, un peu d'OpenAI pour comparer les approches.  
+> **Outils fil rouge** : GitHub Copilot, Claude / Claude Code, OpenCode, API Anthropic, un peu d'OpenAI pour comparer les approches.
 > **Philosophie** : comprendre les concepts, pratiquer vite, puis industrialiser.
 
 ---
