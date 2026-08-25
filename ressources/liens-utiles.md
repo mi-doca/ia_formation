@@ -33,6 +33,11 @@
 - CrewAI : <https://docs.crewai.com/>
 - OpenTelemetry : <https://opentelemetry.io/>
 
+## OpenCode
+
+- Site officiel et documentation : <https://opencode.ai>
+- Dépôt GitHub : <https://github.com/sst/opencode>
+
 ## Tests, CI/CD, packaging Python
 
 - pytest : <https://docs.pytest.org/>

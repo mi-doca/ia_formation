@@ -46,6 +46,9 @@ Adapte-le à ton rythme : le parcours reste valide si tu le fais en 6 ou en 10 s
   - [ ] Compléter l'auto-évaluation du Module 2
 - [ ] Lire [Module 3 — Utilisation en CLI](./module-3-cli/README.md)
   - [ ] Tester `gh copilot suggest` et `gh copilot explain` avec un exemple réel
+  - [ ] Lire [OpenCode — agent CLI open source](./module-3-cli/opencode.md)
+    - [ ] Suivre le workflow pas à pas (étapes 1 à 6)
+    - [ ] Étudier le tableau comparatif OpenCode / Copilot / Claude Code
   - [ ] Compléter l'auto-évaluation du Module 3
 
 ---
