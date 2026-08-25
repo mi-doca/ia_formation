@@ -6,6 +6,8 @@
 - Comprendre les rôles du **réseau de neurones**, du **pré-entraînement** et du **fine-tuning**.
 - Savoir ce qu'est un **token** et pourquoi il compte autant.
 - Situer les **embeddings**, le **Transformer** et l'**attention** dans la chaîne de traitement.
+- Comprendre comment un LLM sait qu'il doit **arrêter de répondre** : stop token, max tokens, stop sequence.
+- Comprendre pourquoi un LLM pose parfois des **questions de clarification** et quel rôle joue l'application.
 - Maîtriser les notions de **fenêtre de contexte**, **température** et **top-p**.
 - Estimer un **coût** de requête ou de session agentique.
 - Découvrir la notion de **plan** et les bases du **prompting**.
@@ -342,7 +344,110 @@ Le **prompt** et le **contexte** lui indiquent :
 
 ---
 
-## 3. Tokens : l'unité qui gouverne tout
+## 3. Comment le modèle sait qu'il doit s'arrêter de répondre
+
+On génère des tokens un par un — mais quand est-ce que ça s'arrête ?
+
+### Deux types d'arrêt
+
+Il existe deux mécanismes distincts, souvent combinés.
+
+#### Arrêt interne : le modèle prédit un token de fin
+
+Pendant l'entraînement, le modèle a vu des millions d'exemples de dialogues.
+Ces exemples contenaient des marqueurs de fin de réponse : des **tokens de fin** (ou *stop tokens*),
+comme `<|end_of_turn|>`, `<|im_end|>` ou leur équivalent selon le modèle.
+
+Le modèle apprend que, dans un contexte donné, ce token spécial est la suite naturelle.
+Quand il le prédit, la génération s'arrête.
+
+> Le modèle ne "sait" pas qu'il a fini au sens humain.
+> Il a simplement appris que, dans ce type de contexte, un token de fin vient souvent ici.
+
+#### Arrêt externe : l'application coupe la génération
+
+L'application qui utilise le modèle peut également imposer des limites :
+
+- **max tokens** : nombre maximal de tokens autorisés dans la réponse.
+  Si ce plafond est atteint, la génération s'arrête même si la réponse semble inachevée.
+- **stop sequences** : une ou plusieurs chaînes de texte qui déclenchent l'arrêt dès qu'elles apparaissent.
+  Exemple : `["###", "---", "\nUtilisateur :"]`.
+
+Ces paramètres ne sont pas définis par le modèle lui-même : ils sont fixés par **l'application ou l'API** qui l'encapsule.
+
+### Résumé des deux cas
+
+| Type d'arrêt | Déclencheur | Qui le contrôle |
+|---|---|---|
+| **Interne** | Le modèle prédit un stop token | Le modèle (via l'entraînement) |
+| **Externe** | Limite de tokens ou stop sequence atteinte | L'application ou l'API |
+
+> Bonne intuition : l'arrêt est une combinaison de ce que le modèle a appris à faire
+> et des contraintes que l'application lui impose.
+
+---
+
+## 4. Pourquoi le modèle pose-t-il parfois des questions ?
+
+Un assistant IA semble parfois "savoir" quand demander une précision plutôt que de répondre directement.
+Ce comportement n'est pas magique — il est le résultat de deux choses combinées.
+
+### Le modèle a appris des schémas conversationnels
+
+Pendant l'entraînement, le modèle a vu des milliers d'échanges où un interlocuteur demandait une précision
+avant de répondre :
+
+- `"Pouvez-vous me préciser dans quel contexte vous souhaitez…"`
+- `"Quand vous dites X, voulez-vous dire A ou B ?"`
+- `"Pour vous aider, j'aurais besoin de savoir…"`
+
+Ces **schémas de clarification** font partie des structures de dialogue que le modèle a mémorisées.
+Quand le contexte actuel ressemble à une situation ambiguë vue pendant l'entraînement,
+le modèle peut produire spontanément une question.
+
+> Le modèle ne "détecte" pas une information manquante au sens logique.
+> Il génère le texte le plus probable compte tenu du contexte,
+> et dans certains contextes, ce texte probable est une question.
+
+### Le rôle des instructions système
+
+L'application peut aussi forcer le comportement via le **system prompt** (ou *message système*).
+Exemples d'instructions typiques :
+
+```text
+Si la demande de l'utilisateur est ambiguë, pose une question de clarification avant de répondre.
+```
+
+```text
+Ne réponds jamais si tu manques d'un contexte essentiel. Demande ce qu'il te faut.
+```
+
+Dans ce cas, le modèle suit une **instruction explicite** : il n'invente pas ce comportement,
+il exécute ce qui lui a été demandé dans le contexte.
+
+### Illustration : quand répondre directement, quand demander une clarification
+
+| Demande utilisateur | Comportement probable | Raison |
+|---|---|---|
+| `"Explique-moi les closures en Python"` | Répond directement | Demande claire et précise |
+| `"Génère un rapport sur notre projet"` | Demande une clarification | Le sujet et le format ne sont pas précisés |
+| `"Écris un email à mon manager"` | Demande le contexte | Sans contenu ni destinataire, impossible de générer utilement |
+| `"Corrige ce code"` *(sans code joint)* | Demande le code | L'information nécessaire est absente du contexte |
+
+### Ce que ça signifie pour toi
+
+Deux leviers co-existent :
+
+1. **L'entraînement** : le modèle a appris à reconnaître les situations où une question est naturelle.
+2. **L'instruction** : l'application peut renforcer ou inhiber ce comportement via le system prompt.
+
+> Un assistant paraît intelligent parce qu'il a appris les structures du dialogue.
+> Mais c'est aussi l'application qui l'encapsule qui décide, via ses instructions,
+> dans quelle mesure il doit demander des précisions ou tenter de répondre quand même.
+
+---
+
+## 5. Tokens : l'unité qui gouverne tout
 
 Un **token** n'est pas toujours un mot.
 Selon le tokenizer, un token peut être :
@@ -376,7 +481,7 @@ car les phrases peuvent être plus longues ou plus flexionnelles.
 
 ---
 
-## 4. Fenêtre de contexte : la RAM du modèle
+## 6. Fenêtre de contexte : la RAM du modèle
 
 La **context window** correspond au nombre maximal de tokens visibles par le modèle à un instant donné.
 Elle contient généralement :
@@ -404,7 +509,7 @@ Pense à un tableau blanc de taille limitée :
 
 ---
 
-## 5. Température et top-p
+## 7. Température et top-p
 
 Ces paramètres influencent la façon dont le modèle choisit les tokens.
 
@@ -427,7 +532,7 @@ Prompt : `Propose trois noms pour un agent qui résume des pull requests.`
 
 ---
 
-## 6. Tarification : input, output, abonnements et API
+## 8. Tarification : input, output, abonnements et API
 
 ### 5.1 Deux mondes à distinguer
 
@@ -500,7 +605,7 @@ Parce qu'ils :
 
 ---
 
-## 7. La notion de plan
+## 9. La notion de plan
 
 Un **plan** est une décomposition explicite d'une tâche en étapes.
 C'est fondamental pour les agents parce que cela :
@@ -526,7 +631,7 @@ Plan possible :
 
 ---
 
-## 8. Prompting : les briques de base
+## 10. Prompting : les briques de base
 
 ### Zero-shot
 
@@ -581,7 +686,7 @@ Contraintes :
 
 ---
 
-## 9. Exemple Python simple : compter le coût d'une requête
+## 11. Exemple Python simple : compter le coût d'une requête
 
 ```python
 from dataclasses import dataclass
@@ -629,6 +734,12 @@ if __name__ == "__main__":
 
 7. Que fait un system prompt ?
 <details><summary>Réponse</summary>Il fixe le rôle, les contraintes et les garde-fous globaux du modèle ou de l'agent.</details>
+
+8. Comment un LLM sait-il qu'il doit s'arrêter de répondre ?
+<details><summary>Réponse</summary>Par arrêt interne (il prédit un stop token appris pendant l'entraînement) ou par arrêt externe (l'application impose une limite max_tokens ou une stop sequence).</details>
+
+9. Pourquoi un LLM pose-t-il parfois des questions de clarification ?
+<details><summary>Réponse</summary>Parce qu'il a appris des schémas conversationnels de demande de précision, et/ou parce que le system prompt lui demande explicitement de poser une question quand une information essentielle manque.</details>
 
 ---
 
