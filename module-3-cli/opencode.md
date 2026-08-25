@@ -28,17 +28,14 @@ Contrairement à Copilot (intégré à l'IDE) ou Claude Code (produit Anthropic)
 ## Installation rapide
 
 ```bash
-# Via npm (méthode recommandée)
-npm install -g opencode-ai
-
-# Vérifier la version
-opencode --version
-
-# Aide
+# Vérifier que la CLI est bien disponible sur ta machine
 opencode --help
+
+# (Optionnel) Vérifier la version
+opencode --version
 ```
 
-> **Note** : vérifie toujours la commande exacte sur la [doc officielle](https://opencode.ai/docs) car les CLI évoluent vite.
+> **Note** : installe OpenCode en suivant la [doc officielle](https://opencode.ai/docs) de ta version (les méthodes d'installation peuvent évoluer).
 
 ---
 
@@ -48,15 +45,15 @@ Crée un fichier `opencode.json` à la racine du projet ou dans `~/.config/openc
 
 ```json
 {
-  "model": "claude-sonnet-4-5",
-  "provider": "anthropic"
+  "provider": "<ton-provider>",
+  "model": "<ton-modele>"
 }
 ```
 
 Les clés API sont à passer via des **variables d'environnement** (jamais en dur dans le fichier) :
 
 ```bash
-export ANTHROPIC_API_KEY="ta-clé-api"
+export <PROVIDER>_API_KEY="ta-cle-api"
 ```
 
 ---

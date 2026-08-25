@@ -66,6 +66,16 @@ L'IA agentique peut aider à :
 
 > L'agent accélère. Il ne remplace pas le jugement d'ingénierie.
 
+### Choisir l'outil selon la tâche (Copilot / Claude Code / OpenCode)
+
+| Besoin | Outil conseillé | Pourquoi |
+|--------|------------------|----------|
+| Modifier vite un bloc de code dans l'IDE | **GitHub Copilot** | Autocomplétion + chat directement dans l'éditeur |
+| Piloter un refactor ou un diagnostic complexe en terminal | **Claude Code** | Agent CLI puissant, bon sur les tâches multi-étapes |
+| Garder un agent CLI open source configurable (provider libre) | **OpenCode** | Flexible, sans lock-in fournisseur, orienté workflows terminal |
+
+👉 Pour un pas-à-pas concret et un comparatif détaillé : [Module 3 — OpenCode](../module-3-cli/opencode.md).
+
 ---
 
 ## 3. Tests unitaires avec pytest
