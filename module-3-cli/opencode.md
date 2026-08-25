@@ -27,36 +27,40 @@ Contrairement à Copilot (intégré à l'IDE) ou Claude Code (produit Anthropic)
 
 ## Installation rapide
 
+OpenCode évolue vite. Selon ta machine et la version disponible, l'installation peut passer
+par un paquet npm, un binaire ou une autre méthode documentée par le projet.
+
+Le bon réflexe est donc :
+
 ```bash
-# Via npm (méthode recommandée)
-npm install -g opencode-ai
-
-# Vérifier la version
-opencode --version
-
-# Aide
+# Vérifier que la commande existe
 opencode --help
+
+# Vérifier la version installée
+opencode --version
 ```
 
-> **Note** : vérifie toujours la commande exacte sur la [doc officielle](https://opencode.ai/docs) car les CLI évoluent vite.
+> **Note** : vérifie toujours la commande d'installation et les options exactes sur la documentation officielle de ta version.
 
 ---
 
 ## Configuration minimale (exemple sans secrets)
 
-Crée un fichier `opencode.json` à la racine du projet ou dans `~/.config/opencode/` :
+Si ta version d'OpenCode supporte un fichier de configuration local, garde-le **minimal**
+et sans secret en dur. Exemple illustratif :
 
 ```json
 {
-  "model": "claude-sonnet-4-5",
-  "provider": "anthropic"
+  "provider": "<ton-provider>",
+  "model": "<ton-modele>"
 }
 ```
 
-Les clés API sont à passer via des **variables d'environnement** (jamais en dur dans le fichier) :
+Les clés API sont à passer via des **variables d'environnement** (jamais en dur dans le
+fichier) :
 
 ```bash
-export ANTHROPIC_API_KEY="ta-clé-api"
+export <PROVIDER>_API_KEY="ta-cle-api"
 ```
 
 ---
@@ -71,6 +75,8 @@ opencode
 ```
 
 OpenCode ouvre une session interactive dans le terminal, avec accès au contenu du dépôt.
+Tu peux alors travailler directement dans le même environnement que tes commandes Git,
+tes logs et tes tests.
 
 ### Étape 2 — Poser une question sur le code
 
