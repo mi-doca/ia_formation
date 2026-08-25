@@ -3,11 +3,13 @@
 | Terme | Définition courte |
 |-------|-------------------|
 | **Agent** | Système piloté par un LLM capable de planifier, appeler des tools et boucler jusqu'à un objectif. |
-| **Attention** | Mécanisme qui aide le modèle à pondérer les parties les plus pertinentes du contexte. |
+| **Attention / self-attention** | Mécanisme du Transformer où chaque token pondère les autres tokens du contexte pour décider quoi regarder en priorité. |
 | **Chain-of-Thought** | Raisonnement étape par étape, parfois explicite, parfois gardé en interne selon l'outil. |
 | **CI/CD** | Continuous Integration / Continuous Deployment : pipeline automatisé qui construit, teste et déploie le code à chaque changement. |
-| **Context window** | Volume maximal de tokens visibles en une fois par le modèle. |
+| **Context window / fenêtre de contexte** | Portion de tokens effectivement visible par le modèle à un instant donné, limitée par la taille maximale de fenêtre. |
 | **Contexte (liste de messages)** | L'ensemble des messages (system, user, assistant, tool) renvoyés au modèle à chaque tour. C'est ce contexte qui donne l'illusion de mémoire. |
+| **Décodage (sampling)** | Stratégie de choix du prochain token à partir de la distribution de probabilités (greedy, sampling, top-p, température). |
+| **Distribution de probabilité** | Répartition des probabilités calculées par le modèle sur les tokens possibles au prochain pas de génération. |
 | **Embedding** | Représentation vectorielle d'un texte utilisée pour comparer la similarité sémantique. |
 | **Eval** | Évaluation mesurée d'un agent ou d'un prompt sur un ensemble de cas. |
 | **Few-shot prompting** | Prompt contenant un petit nombre d'exemples. |
@@ -46,4 +48,5 @@
 | **Transformer** | Architecture de réseau de neurones très utilisée dans les LLM, fondée sur le mécanisme d'attention pour traiter un contexte de tokens. |
 | **Troncature** | Suppression des messages les plus anciens quand la liste de messages dépasse la fenêtre de contexte. |
 | **Vector store** | Base stockant des embeddings pour retrouver rapidement des passages proches d'une requête. |
+| **Vecteur** | Liste de nombres utilisée pour représenter un token, un texte ou un état interne du modèle dans un espace numérique. |
 | **Zero-shot prompting** | Prompt sans exemple. |

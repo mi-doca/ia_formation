@@ -104,16 +104,42 @@ Ensuite, on peut spécialiser le modèle pour mieux répondre à certains usages
 Le **pré-entraînement** donne une base générale.
 Le **fine-tuning** ajuste le comportement pour un usage plus précis.
 
-### Embeddings, Transformer et attention, sans maths lourdes
+### Embeddings, vecteurs et représentations internes (version intuitive)
 
-- Un **embedding** transforme un texte en coordonnées numériques qui capturent du sens.
-  Deux phrases proches en sens auront souvent des vecteurs proches.
-- Le **Transformer** est l'architecture qui permet au modèle d'analyser tous les tokens du contexte ensemble, plutôt qu'un par un de manière rigide.
-- L'**attention** permet au modèle de décider quelles parties du contexte regarder plus
-  fortement pour produire le prochain token.
+Quand on dit qu'un modèle "transforme du texte en nombres", il faut distinguer 3 niveaux :
 
-> Idée clé : le LLM ne relit pas "également" tout ton prompt. Il pondère ce qui semble
-> pertinent à chaque étape de génération.
+- **Token** : le morceau de texte découpé par le tokenizer (`"comprendre"`, `" L"`, `"LM"`, etc.).
+- **Embedding** : la première représentation numérique du token, sous forme de **vecteur**.
+- **Représentation interne** : la version enrichie de ce vecteur après passage dans plusieurs couches.
+
+Dans ce contexte, un **vecteur** est simplement une **liste de nombres**.
+Exemple fictif (très court) :
+
+```text
+"comprendre" -> [0.12, -0.44, 1.03, ...]
+```
+
+Pourquoi une liste de nombres ?
+
+- un ordinateur manipule des nombres, pas directement le sens ;
+- ces nombres donnent une "position" au token dans un espace numérique ;
+- cette position permet de comparer des proximités.
+
+Intuition clé :
+
+- des tokens/phrases proches en sens ont souvent des vecteurs proches ;
+- des tokens très différents ont des vecteurs plus éloignés.
+
+> L'embedding n'est pas "le sens parfait d'un mot". C'est un point de départ numérique qui
+> sera ensuite transformé par le réseau de neurones selon le contexte.
+
+### Transformer et attention, sans maths lourdes
+
+- Le **Transformer** est l'architecture qui prend tous les tokens du contexte et affine leur représentation couche après couche.
+- L'**attention** permet à chaque token de "regarder" les autres tokens pour estimer lesquels sont les plus utiles à cet instant.
+
+> Idée clé : le LLM ne relit pas "également" tout ton prompt. À chaque étape, il pondère les
+> éléments du contexte qui l'aident le plus à choisir le prochain token.
 
 ### Modèle, prompt, contexte, réponse : bien distinguer les rôles
 
@@ -168,9 +194,9 @@ L'idée importante est la suivante :
 - les espaces et morceaux de mots comptent ;
 - `LLM` peut être un seul token... ou plusieurs.
 
-### Étape 2 — Conversion en embeddings
+### Étape 2 — Conversion en embeddings (vecteurs de départ)
 
-Chaque token est transformé en **embedding**, c'est-à-dire en représentation numérique.
+Chaque token est transformé en **embedding**, c'est-à-dire en représentation numérique initiale.
 
 Le modèle ne "voit" pas :
 
@@ -190,9 +216,27 @@ Tu peux imaginer chaque embedding comme une fiche d'identité numérique d'un to
 - un peu de son usage ;
 - un peu de son sens probable.
 
-### Étape 3 — Passage dans le Transformer
+Important :
 
-Les embeddings passent ensuite dans les couches du **Transformer**.
+- le **token** est le morceau de texte ;
+- l'**embedding** est sa première traduction en nombres ;
+- la **représentation interne** est l'embedding modifié par les couches suivantes.
+
+### Étape 3 — Passage dans le réseau de neurones (Transformer)
+
+Les embeddings entrent dans un **réseau de neurones**. Ici, ce réseau est de type **Transformer**.
+
+Tu peux voir le réseau comme une série de "postes de traitement" :
+
+1. chaque couche reçoit une représentation numérique ;
+2. elle la transforme ;
+3. elle passe le résultat à la couche suivante.
+
+Analogie : une phrase passe par plusieurs relectures spécialisées.
+
+- première relecture : repérer les mots importants ;
+- deuxième relecture : repérer les liens entre mots ;
+- troisième relecture : préparer une formulation probable de réponse.
 
 Le rôle du Transformer est de construire progressivement une meilleure compréhension du contexte courant :
 
@@ -201,15 +245,28 @@ Le rôle du Transformer est de construire progressivement une meilleure compréh
 - `LLM` indique le sujet technique ;
 - l'ensemble de la phrase ressemble à une demande pédagogique.
 
-### Étape 4 — Attention sur les parties importantes
+### Étape 4 — Self-attention : chaque token "regarde" les autres
 
-Le mécanisme d'**attention** aide le modèle à déterminer quels tokens sont les plus utiles pour prédire la suite.
+Le mécanisme de **self-attention** aide le modèle à déterminer quels tokens sont les plus utiles pour prédire la suite.
+
+Concrètement, pour chaque token, le modèle estime :
+
+- quels autres tokens du prompt méritent beaucoup d'attention ;
+- lesquels comptent peu dans cette étape précise.
 
 Dans notre exemple, au moment de commencer la réponse, il peut accorder beaucoup d'importance à :
 
 - `comprendre`
 - `fonctionne`
 - `LLM`
+
+Et au sein du mot `LLM`, si la tokenisation donne `" L"` + `"LM"`, ces deux morceaux peuvent aussi se renforcer mutuellement.
+
+Pourquoi c'est essentiel :
+
+- cela aide à relier des éléments éloignés dans la phrase ;
+- cela évite de se baser uniquement sur les derniers mots ;
+- cela améliore les dépendances longues (ex : sujet en début de phrase, précision technique plus loin).
 
 Intuition : si tu réponds à cette phrase, tu ne donnes pas le même type de réponse que pour :
 
@@ -223,34 +280,36 @@ Le modèle "voit" donc que la bonne continuation ressemble probablement à :
 - en français ;
 - orientée débutant si le contexte va dans ce sens.
 
-### Étape 5 — Prédiction du prochain token
+### Étape 5 — Prédiction du prochain token (distribution de probabilités)
 
 À la fin de ce premier passage, le modèle ne sort pas encore toute la réponse.
 Il calcule d'abord :
 
-> **quel est le prochain token le plus plausible ?**
+> **quelle probabilité pour chaque token possible ?**
 
 Exemple fictif de candidats possibles :
 
-| Token candidat | Intuition |
-|----------------|-----------|
-| `Un` | bonne ouverture pour une définition |
-| `Pour` | bonne ouverture pour une explication pédagogique |
-| `Bien` | possible si le ton est conversationnel |
+| Token candidat | Probabilité fictive | Intuition |
+|----------------|--------------------|-----------|
+| `Un` | 42 % | bonne ouverture pour une définition |
+| `Pour` | 28 % | bonne ouverture pour une explication pédagogique |
+| `Bien` | 9 % | possible si le ton est conversationnel |
+| autres tokens | 21 % cumulés | options moins probables |
 
-Il choisit un token selon :
+Le modèle produit donc une **distribution de probabilité**.
+Ensuite, il choisit un token selon une stratégie de **décodage** :
 
-- les probabilités calculées ;
-- les paramètres comme la **température** ;
-- les éventuelles contraintes du système.
+- **greedy** : prendre le plus probable ;
+- **sampling** : tirer au sort pondéré par les probabilités ;
+- avec des réglages comme la **température** ou **top-p**.
 
-Supposons qu'il choisisse :
+Supposons qu'il choisisse (greedy ou sampling très conservateur) :
 
 ```text
 Un
 ```
 
-### Étape 6 — Boucle de génération
+### Étape 6 — Boucle de génération token par token
 
 Le modèle recommence ensuite avec un nouveau contexte :
 
@@ -264,7 +323,7 @@ Utilisateur : j'aimerai comprendre comment fonctionne un LLM
 Assistant : Un
 ```
 
-Puis il prédit le token suivant, par exemple :
+Puis il recalcule une nouvelle distribution et prédit le token suivant, par exemple :
 
 ```text
  LLM
@@ -299,6 +358,12 @@ Il avance itérativement :
 2. il propose le prochain token ;
 3. il ajoute ce token au contexte ;
 4. il recommence.
+
+Autrement dit, la réponse n'est pas "sortie d'un coup" :
+
+- **à chaque itération** : nouveau calcul d'attention + nouvelle distribution de probabilités ;
+- **à chaque token produit** : le contexte change légèrement ;
+- donc la suite la plus probable peut évoluer en temps réel.
 
 ### Mini schéma mental
 
