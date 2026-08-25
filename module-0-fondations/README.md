@@ -115,6 +115,9 @@ Le **fine-tuning** ajuste le comportement pour un usage plus précis.
 > Idée clé : le LLM ne relit pas "également" tout ton prompt. Il pondère ce qui semble
 > pertinent à chaque étape de génération.
 
+> ➡️ Pour une explication approfondie de ces mécanismes avec des analogies concrètes,
+> consulte la section [1b. Sous le capot : vecteurs, réseau de neurones, Transformer et attention](#1b-sous-le-capot--vecteurs-réseau-de-neurones-transformer-et-attention).
+
 ### Modèle, prompt, contexte, réponse : bien distinguer les rôles
 
 | Élément | Rôle |
@@ -132,6 +135,170 @@ Autrement dit :
 
 > ➡️ Si tu veux voir ce mécanisme en action sur un prompt concret, lis maintenant la
 > section [2. Du prompt à la réponse : le trajet complet](#2-du-prompt-à-la-réponse--le-trajet-complet).
+
+---
+
+## 1b. Sous le capot : vecteurs, réseau de neurones, Transformer et attention
+
+Cette section approfondit les mécanismes internes d'un LLM. Aucune formule mathématique, seulement des analogies et des intuitions claires.
+
+### Les tokens et les embeddings
+
+#### Un token, c'est quoi ?
+
+Un **token** est le plus petit morceau de texte que le modèle traite. Ce n'est pas toujours un mot entier :
+- `"Bonjour"` peut être un seul token.
+- `"reconnaissable"` peut être découpé en deux ou trois tokens.
+- Un espace ou une ponctuation peut être un token à part entière.
+
+Le texte `"j'aimerai comprendre comment fonctionne un LLM"` devient une suite de tokens avant même d'entrer dans le modèle.
+
+#### Un embedding, c'est quoi ?
+
+Un **embedding** est la version numérique d'un token.
+
+Parce que le modèle travaille avec des chiffres, chaque token est converti en un **vecteur** : une liste de nombres (souvent plusieurs centaines ou milliers de valeurs).
+
+Exemple simplifié :
+```text
+token "chat"    → [0.21, -0.54, 0.78, ...]
+token "chien"   → [0.19, -0.51, 0.80, ...]
+token "voiture" → [-0.30, 0.10, -0.20, ...]
+```
+
+#### L'intuition de la proximité sémantique
+
+Ce qui est remarquable, c'est que **les mots proches en sens ont tendance à avoir des vecteurs proches**.
+
+Imagine un espace en plusieurs dimensions. Dans cet espace :
+- `"chat"` et `"chien"` sont relativement proches (deux animaux familiers).
+- `"roi"` et `"reine"` sont proches, et leur relation est la même que celle entre `"homme"` et `"femme"`.
+- `"voiture"` et `"salade"` sont loin l'un de l'autre.
+
+Le modèle n'a pas programmé ces relations à la main. Elles sont **apprises** pendant l'entraînement, à force de voir comment les mots s'utilisent les uns par rapport aux autres.
+
+> Idée clé : un vecteur n'est pas une définition de mot. C'est une **position dans un espace appris** qui encode les relations utiles pour prédire la suite.
+
+---
+
+### Le réseau de neurones : une chaîne de transformations
+
+Un **réseau de neurones** dans un LLM, c'est une suite de **couches de calcul**.
+
+Chaque couche :
+1. reçoit des vecteurs en entrée ;
+2. effectue des opérations dessus ;
+3. produit de nouveaux vecteurs en sortie, plus riches d'information.
+
+Tu peux voir ça comme une **chaîne de filtrage progressif** :
+- les premières couches travaillent sur des représentations assez brutes ;
+- les couches du milieu commencent à capter des structures (relations entre mots, intentions, registres) ;
+- les dernières couches produisent une représentation très riche du contexte, prête à être utilisée pour prédire la suite.
+
+Le modèle ne "comprend" pas au sens humain. Il **transforme des représentations** à travers des dizaines ou des centaines de couches jusqu'à ce que la sortie soit utile pour prédire le prochain token.
+
+> Analogie : c'est comme affiner un dessin au crayon en plusieurs passes. Au premier passage, on voit à peine les grandes lignes. À chaque passe suivante, le détail et la précision augmentent.
+
+---
+
+### Le Transformer et la self-attention
+
+#### L'architecture Transformer
+
+Le **Transformer** est l'architecture de réseau de neurones utilisée par la grande majorité des LLM modernes.
+
+Son atout principal : il traite tous les tokens du contexte **en parallèle** et permet à chaque token d'"interagir" avec tous les autres. C'est ce que rend possible le mécanisme d'**attention**.
+
+#### La self-attention : un token "regarde" tous les autres
+
+Dans une phrase, un mot n'existe pas isolément. Son sens dépend du reste.
+
+L'**attention** (aussi appelée **self-attention**) est le mécanisme qui permet à chaque token de tenir compte des autres tokens de la séquence, avec un poids différent selon leur pertinence.
+
+Exemple :
+> "Le livre que j'ai commandé hier **arrive** demain."
+
+Pour bien traiter `"arrive"`, le modèle a besoin de savoir que le sujet est `"le livre"`.
+Grâce à la self-attention, le token `"arrive"` peut **accorder plus d'importance** au token `"livre"` qu'au token `"hier"`.
+
+Concrètement :
+- chaque token produit une sorte de **question** : "qu'est-ce qui est pertinent pour moi ici ?"
+- chaque token produit aussi une **réponse disponible** : "voici ce que j'ai à offrir"
+- l'attention calcule des **scores de pertinence** entre tokens, et pondère en conséquence
+
+#### Pourquoi l'attention est puissante
+
+Sans attention, un modèle aurait du mal à relier deux éléments très éloignés dans une phrase ou dans un long document. L'attention permet de gérer des dépendances à longue portée :
+
+> "Les résultats publiés par l'équipe en janvier, après plusieurs mois d'analyse des données récoltées lors des expériences de l'année précédente, **confirment** l'hypothèse initiale."
+
+Le modèle doit relier `"confirment"` à `"résultats"`, malgré la longue phrase intercalée. L'attention gère cela naturellement.
+
+> Idée clé : grâce à la self-attention, le modèle ne lit pas les tokens un par un dans l'ordre. Il construit une représentation enrichie où chaque token est influencé par le contexte entier.
+
+---
+
+### Comment le modèle calcule le token suivant
+
+#### La sortie du Transformer : une distribution de probabilités
+
+Après que les vecteurs ont traversé toutes les couches du Transformer, le modèle produit une **distribution de probabilités** sur l'ensemble du vocabulaire.
+
+Pour chaque token possible, il estime : *quelle est la probabilité que ce token soit la bonne suite ?*
+
+Exemple simplifié pour le contexte `"Le ciel est"` :
+
+| Token candidat | Probabilité estimée |
+|----------------|---------------------|
+| `bleu`         | 38 %                |
+| `gris`         | 21 %                |
+| `nuageux`      | 14 %                |
+| `dégagé`       | 9 %                 |
+| `rouge`        | 4 %                 |
+| ... (tout le reste du vocabulaire) | 14 % cumulé |
+
+Le modèle n'a pas choisi "bleu" par hasard. Il a appris que dans des contextes similaires, `"bleu"` est la suite la plus fréquente.
+
+#### Le choix du prochain token : sampling et décodage
+
+Une fois la distribution calculée, le modèle **choisit un token**. Il existe plusieurs stratégies :
+
+- **Greedy decoding** : on prend toujours le token le plus probable. Rapide, mais parfois répétitif.
+- **Sampling** : on tire un token au hasard selon les probabilités. Cela introduit de la variabilité.
+- **Top-p (nucleus sampling)** : on ne considère que les tokens qui cumulent jusqu'à *p* % de probabilité, puis on tire parmi eux.
+- **Température** : un paramètre qui "aplatit" ou "accentue" la distribution (voir section [5. Température et top-p](#5-température-et-top-p)).
+
+#### La génération itérative
+
+Ce choix ne produit qu'un seul token. Le modèle ajoute ensuite ce token au contexte et **recommence entièrement** :
+
+```text
+Étape 1 : contexte = "Le ciel est"           → choisit "bleu"
+Étape 2 : contexte = "Le ciel est bleu"      → choisit " et"
+Étape 3 : contexte = "Le ciel est bleu et"   → choisit " dégagé"
+...
+```
+
+C'est pour ça qu'on parle de **génération token par token** : le modèle n'écrit pas toute la réponse d'un coup. Il avance petit à petit, chaque nouveau token s'appuyant sur tous les précédents.
+
+---
+
+### Schéma récapitulatif
+
+```mermaid
+flowchart LR
+    A[Texte du prompt] --> B[Tokenisation]
+    B --> C[Embeddings = vecteurs]
+    C --> D[Couches du Transformer]
+    D --> E[Self-attention entre tokens]
+    E --> F[Distribution de probabilités]
+    F --> G[Choix du prochain token]
+    G --> H[Token ajouté à la réponse]
+    H --> D
+```
+
+> ➡️ Pour voir ce schéma appliqué pas à pas sur un prompt concret, lis la section
+> [2. Du prompt à la réponse : le trajet complet](#2-du-prompt-à-la-réponse--le-trajet-complet).
 
 ---
 
@@ -622,7 +789,7 @@ if __name__ == "__main__":
 <details><summary>Réponse</summary>Pour les tâches de code, d'extraction, de synthèse fiable et de formatage strict.</details>
 
 5. Que fait l'attention dans un LLM ?
-<details><summary>Réponse</summary>Elle aide le modèle à pondérer les parties du contexte les plus utiles pour prédire le prochain token.</details>
+<details><summary>Réponse</summary>Elle aide le modèle à pondérer les parties du contexte les plus utiles pour prédire le prochain token. La self-attention permet notamment à chaque token de tenir compte des autres tokens de la séquence, même éloignés.</details>
 
 6. Pourquoi écrire un plan avant d'agir ?
 <details><summary>Réponse</summary>Pour décomposer la tâche, limiter les erreurs et rendre l'action vérifiable.</details>

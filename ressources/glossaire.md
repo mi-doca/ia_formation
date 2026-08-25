@@ -3,12 +3,13 @@
 | Terme | Définition courte |
 |-------|-------------------|
 | **Agent** | Système piloté par un LLM capable de planifier, appeler des tools et boucler jusqu'à un objectif. |
-| **Attention** | Mécanisme qui aide le modèle à pondérer les parties les plus pertinentes du contexte. |
+| **Attention** | Mécanisme qui aide le modèle à pondérer les parties les plus pertinentes du contexte. Voir aussi **self-attention**. |
 | **Chain-of-Thought** | Raisonnement étape par étape, parfois explicite, parfois gardé en interne selon l'outil. |
 | **CI/CD** | Continuous Integration / Continuous Deployment : pipeline automatisé qui construit, teste et déploie le code à chaque changement. |
 | **Context window** | Volume maximal de tokens visibles en une fois par le modèle. |
 | **Contexte (liste de messages)** | L'ensemble des messages (system, user, assistant, tool) renvoyés au modèle à chaque tour. C'est ce contexte qui donne l'illusion de mémoire. |
-| **Embedding** | Représentation vectorielle d'un texte utilisée pour comparer la similarité sémantique. |
+| **Distribution de probabilités** | Lors de la prédiction du prochain token, le modèle attribue une probabilité à chaque token possible du vocabulaire ; c'est cette distribution qui est utilisée pour choisir le token suivant. |
+| **Embedding** | Représentation vectorielle (vecteur de nombres) d'un token ou d'un texte, apprise pendant l'entraînement, qui encode les relations sémantiques. Deux tokens proches en sens ont tendance à avoir des vecteurs proches. |
 | **Eval** | Évaluation mesurée d'un agent ou d'un prompt sur un ensemble de cas. |
 | **Few-shot prompting** | Prompt contenant un petit nombre d'exemples. |
 | **Fine-tuning** | Phase d'ajustement d'un modèle déjà pré-entraîné pour mieux suivre des instructions ou mieux se comporter dans un domaine donné. |
@@ -32,6 +33,8 @@
 | **ReAct** | Pattern agentique alternant raisonnement et action. |
 | **Resource** | Donnée ou document exposé par un serveur MCP. |
 | **Réseau de neurones** | Ensemble de couches de calcul qui transforment des nombres en représentations de plus en plus utiles pour une tâche. |
+| **Sampling / décodage** | Stratégie utilisée pour choisir le prochain token à partir de la distribution de probabilités : greedy (le plus probable), sampling aléatoire, top-p (nucleus), etc. La température influe sur cette distribution. |
+| **Self-attention** | Forme d'attention où chaque token d'une séquence peut "regarder" tous les autres tokens pour ajuster sa propre représentation. C'est le cœur du Transformer. |
 | **SDLC** | Software Development Lifecycle : ensemble des étapes du cycle de vie d'un logiciel (spécification, développement, tests, déploiement, maintenance). |
 | **Skill / custom agent** | Agent ou jeu d'instructions réutilisable pour une tâche spécialisée. |
 | **Sous-agent** | Agent spécialisé appelé par un agent superviseur. |
@@ -45,5 +48,6 @@
 | **Tour agentique** | Une itération de la boucle agentique : appel LLM → tool_use → tool_result → prochain appel LLM. |
 | **Transformer** | Architecture de réseau de neurones très utilisée dans les LLM, fondée sur le mécanisme d'attention pour traiter un contexte de tokens. |
 | **Troncature** | Suppression des messages les plus anciens quand la liste de messages dépasse la fenêtre de contexte. |
+| **Vecteur** | Liste de nombres qui représente un token ou un texte dans un espace mathématique appris. Les vecteurs proches en distance correspondent à des tokens proches en sens. Voir **embedding**. |
 | **Vector store** | Base stockant des embeddings pour retrouver rapidement des passages proches d'une requête. |
 | **Zero-shot prompting** | Prompt sans exemple. |
