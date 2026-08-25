@@ -2,13 +2,13 @@
 
 ## 🎯 Objectifs d'apprentissage
 
-- Utiliser GitHub Copilot et Claude depuis le terminal.
+- Utiliser GitHub Copilot, Claude Code et OpenCode depuis le terminal.
 - Comprendre quand le mode CLI est plus efficace que le chat IDE.
 - Intégrer des appels IA dans des scripts et workflows de dev.
 
 ## ⏱️ Durée estimée
 
-1 h 30 à 2 h.
+1 h 30 à 2 h 30.
 
 ## ✅ Prérequis
 
@@ -61,7 +61,20 @@ gh copilot explain "git rebase --interactive HEAD~4"
 
 ---
 
-## 3. Claude Code en CLI
+## 3. OpenCode en CLI
+
+OpenCode est un agent CLI **open source** qui te permet de piloter un LLM directement depuis le terminal pour explorer, modifier et tester du code.
+
+```bash
+# Lancer OpenCode dans le dépôt courant
+opencode
+```
+
+👉 **Section dédiée** : [Utiliser OpenCode — intro, workflow pas à pas et comparatif](./opencode.md)
+
+---
+
+## 4. Claude Code en CLI
 
 Selon la version, la commande peut être `claude` ou `claude-code`.
 Vérifie systématiquement avec `--help`.
@@ -84,7 +97,7 @@ claude "propose un plan de tests pour ce bug"
 
 ---
 
-## 4. Automatiser des tâches de dev
+## 5. Automatiser des tâches de dev
 
 ### Exemple : enrichir un script shell existant
 
@@ -114,7 +127,7 @@ if __name__ == "__main__":
 
 ---
 
-## 5. Quand préférer la CLI au chat IDE ?
+## 6. Quand préférer la CLI au chat IDE ?
 
 Choisis la CLI quand tu veux :
 
@@ -131,7 +144,7 @@ Garde le chat IDE quand tu veux :
 
 ---
 
-## 6. Exemples de prompts CLI efficaces
+## 7. Exemples de prompts CLI efficaces
 
 ### Pour Copilot CLI
 
@@ -155,7 +168,7 @@ Contraintes : réponse courte, structurée, citer les fichiers.
 
 ---
 
-## 7. Risques fréquents en CLI
+## 8. Risques fréquents en CLI
 
 - donner trop de permissions ;
 - lancer des commandes destructives sans relecture ;
@@ -180,6 +193,9 @@ Contraintes : réponse courte, structurée, citer les fichiers.
 
 5. Quelle est la bonne habitude avant d'utiliser une commande Claude Code ?
 <details><summary>Réponse</summary>Vérifier la version et l'aide (`--help`) car les commandes exactes peuvent évoluer.</details>
+
+6. Cite une différence clé entre OpenCode et Copilot.
+<details><summary>Réponse</summary>OpenCode est open source et agnostique au LLM (compatible plusieurs providers) ; Copilot est propriétaire et intégré à l'IDE.</details>
 
 ---
 
