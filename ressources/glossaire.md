@@ -3,11 +3,12 @@
 | Terme | Définition courte |
 |-------|-------------------|
 | **Agent** | Système piloté par un LLM capable de planifier, appeler des tools et boucler jusqu'à un objectif. |
-| **Attention / self-attention** | Mécanisme par lequel chaque token peut pondérer les autres tokens du contexte pour construire une représentation plus utile. |
+| **Attention / self-attention** | Mécanisme du Transformer où chaque token pondère les autres tokens du contexte pour décider quoi regarder en priorité. |
 | **Chain-of-Thought** | Raisonnement étape par étape, parfois explicite, parfois gardé en interne selon l'outil. |
 | **CI/CD** | Continuous Integration / Continuous Deployment : pipeline automatisé qui construit, teste et déploie le code à chaque changement. |
-| **Context window / fenêtre de contexte** | Volume maximal de tokens visibles en une fois par le modèle. |
+| **Context window / fenêtre de contexte** | Portion de tokens effectivement visible par le modèle à un instant donné, limitée par la taille maximale de fenêtre. |
 | **Contexte (liste de messages)** | L'ensemble des messages (system, user, assistant, tool) renvoyés au modèle à chaque tour. C'est ce contexte qui donne l'illusion de mémoire. |
+| **Distribution de probabilité** | Répartition des probabilités calculées par le modèle sur les tokens possibles au prochain pas de génération. |
 | **Embedding** | Vecteur de départ associé à un token ou à un texte, utilisé pour le représenter sous forme numérique. |
 | **Eval** | Évaluation mesurée d'un agent ou d'un prompt sur un ensemble de cas. |
 | **Few-shot prompting** | Prompt contenant un petit nombre d'exemples. |
@@ -48,5 +49,4 @@
 | **Troncature** | Suppression des messages les plus anciens quand la liste de messages dépasse la fenêtre de contexte. |
 | **Vecteur** | Liste de nombres utilisée pour représenter un token, un texte ou un état interne du modèle. |
 | **Vector store** | Base stockant des embeddings pour retrouver rapidement des passages proches d'une requête. |
-| **Distribution de probabilité** | Répartition des probabilités attribuées par le modèle aux différents tokens possibles à l'étape suivante. |
 | **Zero-shot prompting** | Prompt sans exemple. |
