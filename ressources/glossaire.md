@@ -8,7 +8,7 @@
 | **CI/CD** | Continuous Integration / Continuous Deployment : pipeline automatisé qui construit, teste et déploie le code à chaque changement. |
 | **Context window** | Volume maximal de tokens visibles en une fois par le modèle. |
 | **Contexte (liste de messages)** | L'ensemble des messages (system, user, assistant, tool) renvoyés au modèle à chaque tour. C'est ce contexte qui donne l'illusion de mémoire. |
-| **Embedding** | Représentation vectorielle d'un texte utilisée pour comparer la similarité sémantique. |
+| **Embedding** | Vecteur numérique représentant un token ou un texte. Capture des proximités de sens : deux tokens proches en signification ont souvent des embeddings proches. |
 | **Eval** | Évaluation mesurée d'un agent ou d'un prompt sur un ensemble de cas. |
 | **Few-shot prompting** | Prompt contenant un petit nombre d'exemples. |
 | **Fine-tuning** | Phase d'ajustement d'un modèle déjà pré-entraîné pour mieux suivre des instructions ou mieux se comporter dans un domaine donné. |
@@ -32,6 +32,7 @@
 | **ReAct** | Pattern agentique alternant raisonnement et action. |
 | **Resource** | Donnée ou document exposé par un serveur MCP. |
 | **Réseau de neurones** | Ensemble de couches de calcul qui transforment des nombres en représentations de plus en plus utiles pour une tâche. |
+| **Self-attention** | Variante de l'attention où chaque token d'un même contexte peut peser l'importance de tous les autres tokens pour affiner sa propre représentation. |
 | **SDLC** | Software Development Lifecycle : ensemble des étapes du cycle de vie d'un logiciel (spécification, développement, tests, déploiement, maintenance). |
 | **Skill / custom agent** | Agent ou jeu d'instructions réutilisable pour une tâche spécialisée. |
 | **Sous-agent** | Agent spécialisé appelé par un agent superviseur. |
@@ -45,5 +46,6 @@
 | **Tour agentique** | Une itération de la boucle agentique : appel LLM → tool_use → tool_result → prochain appel LLM. |
 | **Transformer** | Architecture de réseau de neurones très utilisée dans les LLM, fondée sur le mécanisme d'attention pour traiter un contexte de tokens. |
 | **Troncature** | Suppression des messages les plus anciens quand la liste de messages dépasse la fenêtre de contexte. |
+| **Vecteur** | Liste de nombres représentant un token ou un texte dans un espace mathématique. Des tokens au sens proche ont généralement des vecteurs proches. Voir aussi : embedding. |
 | **Vector store** | Base stockant des embeddings pour retrouver rapidement des passages proches d'une requête. |
 | **Zero-shot prompting** | Prompt sans exemple. |

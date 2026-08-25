@@ -4,7 +4,9 @@
 
 - Comprendre intuitivement comment fonctionne un LLM.
 - Comprendre les rôles du **réseau de neurones**, du **pré-entraînement** et du **fine-tuning**.
-- Savoir ce qu'est un **token** et pourquoi il compte autant.
+- Savoir ce qu'est un **token**, un **vecteur** et un **embedding**.
+- Comprendre le rôle du **Transformer** et de l'**attention** (self-attention).
+- Comprendre comment le modèle calcule la **probabilité du token suivant**.
 - Situer les **embeddings**, le **Transformer** et l'**attention** dans la chaîne de traitement.
 - Maîtriser les notions de **fenêtre de contexte**, **température** et **top-p**.
 - Estimer un **coût** de requête ou de session agentique.
@@ -115,6 +117,9 @@ Le **fine-tuning** ajuste le comportement pour un usage plus précis.
 > Idée clé : le LLM ne relit pas "également" tout ton prompt. Il pondère ce qui semble
 > pertinent à chaque étape de génération.
 
+> ➡️ Pour aller plus loin sans maths lourdes, lis la
+> [section 1b — Fonctionnement interne : du texte aux probabilités](#1b-fonctionnement-interne--du-texte-aux-probabilités).
+
 ### Modèle, prompt, contexte, réponse : bien distinguer les rôles
 
 | Élément | Rôle |
@@ -132,6 +137,172 @@ Autrement dit :
 
 > ➡️ Si tu veux voir ce mécanisme en action sur un prompt concret, lis maintenant la
 > section [2. Du prompt à la réponse : le trajet complet](#2-du-prompt-à-la-réponse--le-trajet-complet).
+
+---
+
+## 1b. Fonctionnement interne : du texte aux probabilités
+
+Cette section va plus loin sur ce qui se passe réellement à l'intérieur du modèle,
+sans formalisme mathématique lourd.
+
+### Les tokens et les vecteurs
+
+Tout commence par le découpage du texte en **tokens**.
+Chaque token est ensuite transformé en **vecteur** : une simple liste de nombres.
+
+> Imagine un vecteur comme une adresse GPS dans un espace à plusieurs centaines de
+> dimensions. Chaque token a sa propre adresse, et des tokens au sens proche ont des
+> adresses proches.
+
+Exemples intuitifs de proximité :
+
+| Pair de tokens | Proximité vectorielle attendue |
+|----------------|-------------------------------|
+| `chat` / `chien` | proches (deux animaux domestiques) |
+| `roi` / `reine` | proches (royauté, personnes) |
+| `voiture` / `salade` | lointains (rien en commun) |
+| `courir` / `galoper` | assez proches (mouvement rapide) |
+
+L'**embedding** est le nom donné à ce vecteur représentatif d'un token.
+Il capture une partie du sens, de l'usage habituel et des associations statistiques
+apprises pendant l'entraînement.
+
+### Le réseau de neurones : une chaîne de transformations
+
+Un **réseau de neurones** est une suite de **couches de calcul**.
+Chaque couche reçoit des vecteurs, les transforme, et passe le résultat à la couche suivante.
+
+Imagine une chaîne de filtrage :
+
+```text
+Texte brut
+  ↓
+Couche 1 : commence à repérer des structures syntaxiques
+  ↓
+Couche 2 : capte des relations entre mots
+  ↓
+Couche N : représentation riche et contextualisée du sens
+  ↓
+Prédiction du prochain token
+```
+
+Ce qu'il faut retenir :
+
+- le modèle ne "comprend" pas comme un humain ;
+- il **transforme progressivement des vecteurs** pour en extraire des régularités utiles ;
+- plus il y a de couches et de paramètres, plus les représentations peuvent être riches.
+
+### Le Transformer : l'architecture qui a tout changé
+
+Le **Transformer** est l'architecture de réseau de neurones utilisée par la quasi-totalité des LLM modernes.
+
+Son innovation principale : il ne lit pas les tokens de gauche à droite de façon rigide.
+À chaque couche, il peut **comparer tous les tokens entre eux** et décider lesquels
+méritent le plus d'attention.
+
+```mermaid
+flowchart TD
+    A[Token 1] & B[Token 2] & C[Token 3] & D[Token N]
+    A & B & C & D --> E[Couche Transformer]
+    E --> F[Représentation enrichie de chaque token]
+```
+
+Autrement dit, la représentation d'un token dépend non seulement de lui-même,
+mais aussi de tous les tokens qui l'entourent dans le contexte.
+
+### L'attention et la self-attention
+
+Le mécanisme d'**attention** est le cœur du Transformer.
+
+**Self-attention** signifie que chaque token peut "regarder" les autres tokens
+du même contexte pour décider comment se représenter lui-même.
+
+#### Analogie simple
+
+Phrase : `"Le livre que j'ai commandé hier arrive demain"`
+
+Pour bien comprendre le sens de `arrive`, le modèle doit savoir :
+
+- que `livre` est le sujet (malgré la distance dans la phrase) ;
+- que `commandé` et `hier` donnent le contexte temporel.
+
+L'attention permet exactement cela : un token éloigné peut avoir un **poids fort**
+si le modèle juge qu'il est décisif pour la suite.
+
+#### Comment ça marche en image
+
+```text
+Pour chaque token :
+  - Il pose une "question" : que dois-je chercher dans le contexte ?
+  - Chaque autre token répond : voici ce que je peux t'apporter.
+  - Un score de pertinence est calculé pour chaque paire.
+  - Le token reçoit une représentation enrichie en pondérant les autres.
+```
+
+Le résultat : un vecteur mis à jour pour chaque token, qui tient compte du contexte global.
+
+> **Multi-head attention** : en pratique, le Transformer lance plusieurs "têtes" d'attention
+> en parallèle, chacune cherchant des types de relations différents
+> (syntaxe, coreférence, temporalité, etc.). Les résultats sont ensuite combinés.
+
+### Comment le modèle calcule la probabilité du prochain token
+
+Après plusieurs couches de Transformer enrichies par l'attention,
+le modèle a une représentation très riche du contexte courant.
+
+Il utilise cette représentation pour calculer une **distribution de probabilités**
+sur l'ensemble des tokens de son vocabulaire (souvent plusieurs dizaines de milliers).
+
+#### En clair, il répond à la question :
+
+> « Compte tenu de tout ce qui précède, quel token serait la suite la plus plausible ? »
+
+#### Exemple simplifié
+
+Contexte : `"Un LLM est un moteur de"`
+
+Distributions possibles (fictives) :
+
+| Token candidat | Probabilité estimée |
+|----------------|-------------------|
+| ` prédiction` | 42 % |
+| ` génération` | 28 % |
+| ` calcul` | 12 % |
+| ` traitement` | 8 % |
+| (tous les autres) | 10 % |
+
+Le modèle choisit ensuite un token selon :
+
+- **température basse** → il prend presque toujours le plus probable (`prédiction`) ;
+- **température plus haute** → il peut choisir un token moins probable, pour plus de variété.
+
+Une fois le token choisi, il est ajouté au contexte, et le cycle recommence.
+
+### La boucle de génération
+
+```mermaid
+flowchart LR
+    A[Contexte actuel] --> B[Tokenisation]
+    B --> C[Embeddings]
+    C --> D[Couches Transformer + Attention]
+    D --> E[Distribution de probabilités]
+    E --> F[Choix du token suivant]
+    F --> G[Token ajouté au contexte]
+    G --> A
+```
+
+Le modèle répète ce cycle jusqu'à produire un token de fin de séquence,
+ou jusqu'à atteindre la limite de tokens définie.
+
+### Résumé en une phrase
+
+> Un LLM transforme ton texte en vecteurs, fait circuler ces vecteurs dans des couches
+> de Transformer qui utilisent l'attention pour relier les tokens importants entre eux,
+> puis calcule à chaque étape la probabilité du token suivant pour construire
+> sa réponse petit à petit.
+
+> ➡️ Voir maintenant la [section 2](#2-du-prompt-à-la-réponse--le-trajet-complet)
+> pour un exemple pas à pas sur un prompt concret.
 
 ---
 
@@ -613,21 +784,27 @@ if __name__ == "__main__":
 <details><summary>Réponse</summary>Un token est une unité du tokenizer ; un mot peut correspondre à un ou plusieurs tokens.</details>
 
 2. À quoi sert un embedding ?
-<details><summary>Réponse</summary>À représenter un token ou un texte sous forme numérique pour que le modèle puisse le manipuler et comparer des proximités de sens.</details>
+<details><summary>Réponse</summary>À représenter un token sous forme d'un vecteur numérique, de façon à ce que des tokens au sens proche aient des vecteurs proches et que le modèle puisse manipuler ces représentations.</details>
 
-3. Pourquoi une session agentique coûte-t-elle plus cher qu'une simple question ?
+3. Qu'est-ce qu'un vecteur dans le contexte d'un LLM ?
+<details><summary>Réponse</summary>Une liste de nombres qui représente un token dans un espace mathématique. C'est grâce à ces vecteurs que le modèle manipule du texte sous forme numérique.</details>
+
+4. Quel est le rôle de l'attention (et de la self-attention) dans un Transformer ?
+<details><summary>Réponse</summary>L'attention permet à chaque token de peser l'importance de tous les autres tokens du contexte pour affiner sa propre représentation. Cela aide le modèle à relier des éléments éloignés dans la phrase.</details>
+
+5. Comment le modèle détermine-t-il le prochain token ?
+<details><summary>Réponse</summary>Il calcule une distribution de probabilités sur tous les tokens possibles du vocabulaire, puis choisit l'un d'eux selon cette distribution et les paramètres de génération (température, top-p).</details>
+
+6. Pourquoi une session agentique coûte-t-elle plus cher qu'une simple question ?
 <details><summary>Réponse</summary>Parce qu'elle réinjecte historique, résultats d'outils et itérations supplémentaires.</details>
 
-4. Quand utiliser une température basse ?
+7. Quand utiliser une température basse ?
 <details><summary>Réponse</summary>Pour les tâches de code, d'extraction, de synthèse fiable et de formatage strict.</details>
 
-5. Que fait l'attention dans un LLM ?
-<details><summary>Réponse</summary>Elle aide le modèle à pondérer les parties du contexte les plus utiles pour prédire le prochain token.</details>
-
-6. Pourquoi écrire un plan avant d'agir ?
+8. Pourquoi écrire un plan avant d'agir ?
 <details><summary>Réponse</summary>Pour décomposer la tâche, limiter les erreurs et rendre l'action vérifiable.</details>
 
-7. Que fait un system prompt ?
+9. Que fait un system prompt ?
 <details><summary>Réponse</summary>Il fixe le rôle, les contraintes et les garde-fous globaux du modèle ou de l'agent.</details>
 
 ---
