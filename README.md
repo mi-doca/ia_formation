@@ -50,7 +50,7 @@ appliquée au développement logiciel.
 
 | # | Module | Ce que tu y apprends |
 |---|--------|----------------------|
-| 0 | [Fondations de l'IA générative](./module-0-fondations/README.md) | LLM, tokens, contexte, température, top-p, tarification, plans, prompting |
+| 0 | [Fondations de l'IA générative](./module-0-fondations/README.md) | Fonctionnement d'un LLM, tokens, embeddings, Transformer, contexte, tarification, plans, prompting |
 | 1 | [Anatomie d'un agent](./module-1-agents/README.md) | Boucle agentique, ReAct, tools, mémoire, RAG, sous-agents — **+ [fonctionnement détaillé](./module-1-agents/fonctionnement-detaille.md)** |
 | 2 | [Le protocole MCP](./module-2-mcp/README.md) | Architecture MCP, serveurs, clients, resources, prompts, tools |
 | 3 | [Utilisation en CLI](./module-3-cli/README.md) | `gh copilot`, Claude Code, scripts et automatisation terminal |
