@@ -12,10 +12,11 @@ Adapte-le à ton rythme : le parcours reste valide si tu le fais en 6 ou en 10 s
 **Objectif** : comprendre comment fonctionne un LLM, configurer l'environnement.
 
 - [ ] Lire [Module 0 — Fondations](./module-0-fondations/README.md) en entier
-- [ ] Faire les exercices de calcul de coût (sections 5.4 et 5.5)
+- [ ] Relire la section "Du prompt à la réponse" et refaire mentalement l'exemple pas à pas sur `j'aimerai comprendre comment fonctionne un LLM`
+- [ ] Faire les exercices de calcul de coût (sections 6.4 et 6.5)
 - [ ] Installer Python 3.10+, Git et un IDE avec GitHub Copilot
 - [ ] Créer un environnement virtuel et installer les dépendances : `pip install -r requirements.txt`
-- [ ] Faire les exercices de prompting (section 7 du Module 0)
+- [ ] Faire les exercices de prompting (section 8 du Module 0)
 - [ ] Parcourir le [Glossaire](./ressources/glossaire.md) une première fois
 - [ ] Consulter la [Cheatsheet prompting](./ressources/cheatsheet-prompting.md)
 

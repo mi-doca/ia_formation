@@ -3,7 +3,9 @@
 ## 🎯 Objectifs d'apprentissage
 
 - Comprendre intuitivement comment fonctionne un LLM.
+- Comprendre les rôles du **réseau de neurones**, du **pré-entraînement** et du **fine-tuning**.
 - Savoir ce qu'est un **token** et pourquoi il compte autant.
+- Situer les **embeddings**, le **Transformer** et l'**attention** dans la chaîne de traitement.
 - Maîtriser les notions de **fenêtre de contexte**, **température** et **top-p**.
 - Estimer un **coût** de requête ou de session agentique.
 - Découvrir la notion de **plan** et les bases du **prompting**.
@@ -25,6 +27,14 @@ Un **LLM** (*Large Language Model*) est un moteur de prédiction du prochain tok
 Il ne "pense" pas comme un humain : il observe une suite de tokens et prédit la suite
 la plus plausible compte tenu de ce qu'il a appris.
 
+### Ce que veut dire "modèle de langage"
+
+- **Modèle** : un grand système de calcul, entraîné à reconnaître des régularités dans du texte.
+- **Langage** : il travaille sur du texte découpé en **tokens**.
+- **Grande taille** : il possède énormément de paramètres et a vu énormément d'exemples pendant son entraînement.
+
+Dit autrement : un LLM est une machine qui a appris à compléter du texte de manière très convaincante.
+
 ### Analogie utile
 
 Imagine un clavier de smartphone extraordinairement puissant :
@@ -42,19 +52,297 @@ flowchart LR
     E --> F[Réponse générée token par token]
 ```
 
-### Embeddings et attention, sans maths lourdes
+### Pourquoi parle-t-on de réseau de neurones ?
+
+Un LLM est un **réseau de neurones** : un grand ensemble de couches de calcul qui transforment progressivement des nombres en d'autres nombres.
+
+Pas besoin d'entrer dans les maths pour l'intuition :
+
+- le texte d'entrée est converti en nombres ;
+- ces nombres traversent de nombreuses couches ;
+- chaque couche affine la représentation de ce qui est en train d'être lu ;
+- à la fin, le modèle produit une estimation du **prochain token** le plus plausible.
+
+Tu peux voir cela comme une chaîne d'interprétation :
+
+1. au début, le modèle voit surtout des morceaux de texte ;
+2. au milieu, il capte des relations, des intentions, des structures ;
+3. à la fin, il transforme cela en choix de continuation possible.
+
+### Entraînement, pré-entraînement et fine-tuning
+
+Un LLM ne naît pas "sachant" répondre. Il est entraîné en plusieurs phases.
+
+#### Pré-entraînement
+
+Le modèle lit une énorme quantité de texte et apprend surtout une chose :
+
+> **prédire le token suivant**
+
+Exemple très simplifié :
+
+- entrée : `Le ciel est`
+- cible attendue : ` bleu` ou une autre suite plausible selon le contexte
+
+À force de répéter cet exercice à très grande échelle, le modèle apprend :
+
+- des structures de phrases ;
+- du vocabulaire ;
+- des faits souvent présents dans les données ;
+- des styles d'écriture ;
+- des liens entre concepts.
+
+#### Fine-tuning
+
+Ensuite, on peut spécialiser le modèle pour mieux répondre à certains usages :
+
+- suivre des instructions ;
+- adopter un ton plus utile ;
+- mieux répondre dans un domaine donné ;
+- respecter des formats.
+
+Le **pré-entraînement** donne une base générale.
+Le **fine-tuning** ajuste le comportement pour un usage plus précis.
+
+### Embeddings, Transformer et attention, sans maths lourdes
 
 - Un **embedding** transforme un texte en coordonnées numériques qui capturent du sens.
   Deux phrases proches en sens auront souvent des vecteurs proches.
+- Le **Transformer** est l'architecture qui permet au modèle d'analyser tous les tokens du contexte ensemble, plutôt qu'un par un de manière rigide.
 - L'**attention** permet au modèle de décider quelles parties du contexte regarder plus
   fortement pour produire le prochain token.
 
 > Idée clé : le LLM ne relit pas "également" tout ton prompt. Il pondère ce qui semble
 > pertinent à chaque étape de génération.
 
+### Modèle, prompt, contexte, réponse : bien distinguer les rôles
+
+| Élément | Rôle |
+|---------|------|
+| **Modèle** | Le moteur entraîné qui sait prédire le prochain token |
+| **Prompt** | La consigne ou question que tu envoies maintenant |
+| **Contexte** | Tout ce qui est visible par le modèle à cet instant : consignes, historique, documents, résultats d'outils |
+| **Réponse** | Le texte généré token par token par le modèle |
+
+Autrement dit :
+
+- ce que le modèle "sait" vient surtout de son **entraînement** ;
+- ce qu'il fait ici et maintenant dépend du **prompt** et du **contexte** ;
+- ce qu'il produit apparaît dans la **réponse**.
+
+> ➡️ Si tu veux voir ce mécanisme en action sur un prompt concret, lis maintenant la
+> section [2. Du prompt à la réponse : le trajet complet](#2-du-prompt-à-la-réponse--le-trajet-complet).
+
 ---
 
-## 2. Tokens : l'unité qui gouverne tout
+## 2. Du prompt à la réponse : le trajet complet
+
+Prenons le prompt :
+
+> `j'aimerai comprendre comment fonctionne un LLM`
+
+Voici ce qui se passe, de façon pédagogique.
+
+### Étape 1 — Tokenisation
+
+Le texte n'entre pas directement "comme une phrase" dans le modèle.
+Il est d'abord découpé en **tokens**.
+
+Découpage intuitif possible :
+
+```text
+"j'"
+"aimerai"
+" comprendre"
+" comment"
+" fonctionne"
+" un"
+" L"
+"LM"
+```
+
+Le découpage exact dépend du tokenizer du fournisseur.
+L'idée importante est la suivante :
+
+- un token n'est pas forcément un mot entier ;
+- les espaces et morceaux de mots comptent ;
+- `LLM` peut être un seul token... ou plusieurs.
+
+### Étape 2 — Conversion en embeddings
+
+Chaque token est transformé en **embedding**, c'est-à-dire en représentation numérique.
+
+Le modèle ne "voit" pas :
+
+```text
+j'aimerai comprendre comment fonctionne un LLM
+```
+
+Il voit plutôt quelque chose comme :
+
+```text
+[vecteur 1] [vecteur 2] [vecteur 3] ...
+```
+
+Tu peux imaginer chaque embedding comme une fiche d'identité numérique d'un token :
+
+- un peu de sa forme ;
+- un peu de son usage ;
+- un peu de son sens probable.
+
+### Étape 3 — Passage dans le Transformer
+
+Les embeddings passent ensuite dans les couches du **Transformer**.
+
+Le rôle du Transformer est de construire progressivement une meilleure compréhension du contexte courant :
+
+- `comprendre` signale une demande d'explication ;
+- `comment fonctionne` signale une attente de mécanisme ;
+- `LLM` indique le sujet technique ;
+- l'ensemble de la phrase ressemble à une demande pédagogique.
+
+### Étape 4 — Attention sur les parties importantes
+
+Le mécanisme d'**attention** aide le modèle à déterminer quels tokens sont les plus utiles pour prédire la suite.
+
+Dans notre exemple, au moment de commencer la réponse, il peut accorder beaucoup d'importance à :
+
+- `comprendre`
+- `fonctionne`
+- `LLM`
+
+Intuition : si tu réponds à cette phrase, tu ne donnes pas le même type de réponse que pour :
+
+- `écris un poème sur un LLM`
+- `compare deux LLM`
+- `corrige cette phrase`
+
+Le modèle "voit" donc que la bonne continuation ressemble probablement à :
+
+- une explication ;
+- en français ;
+- orientée débutant si le contexte va dans ce sens.
+
+### Étape 5 — Prédiction du prochain token
+
+À la fin de ce premier passage, le modèle ne sort pas encore toute la réponse.
+Il calcule d'abord :
+
+> **quel est le prochain token le plus plausible ?**
+
+Exemple fictif de candidats possibles :
+
+| Token candidat | Intuition |
+|----------------|-----------|
+| `Un` | bonne ouverture pour une définition |
+| `Pour` | bonne ouverture pour une explication pédagogique |
+| `Bien` | possible si le ton est conversationnel |
+
+Il choisit un token selon :
+
+- les probabilités calculées ;
+- les paramètres comme la **température** ;
+- les éventuelles contraintes du système.
+
+Supposons qu'il choisisse :
+
+```text
+Un
+```
+
+### Étape 6 — Boucle de génération
+
+Le modèle recommence ensuite avec un nouveau contexte :
+
+- le prompt initial ;
+- **plus** le token déjà généré.
+
+Le contexte devient, schématiquement :
+
+```text
+Utilisateur : j'aimerai comprendre comment fonctionne un LLM
+Assistant : Un
+```
+
+Puis il prédit le token suivant, par exemple :
+
+```text
+ LLM
+```
+
+Puis :
+
+```text
+ est
+```
+
+Puis :
+
+```text
+ un
+```
+
+Et ainsi de suite, jusqu'à obtenir quelque chose comme :
+
+```text
+Un LLM est un modèle de langage entraîné à prédire le token suivant...
+```
+
+### Étape 7 — Construction progressive d'une réponse cohérente
+
+La réponse finale est donc construite **petit morceau par petit morceau**.
+
+Le modèle ne rédige pas toute la phrase "dans sa tête" avant de l'écrire.
+Il avance itérativement :
+
+1. il regarde tout le contexte disponible ;
+2. il propose le prochain token ;
+3. il ajoute ce token au contexte ;
+4. il recommence.
+
+### Mini schéma mental
+
+```mermaid
+flowchart LR
+    A[Prompt utilisateur] --> B[Tokens]
+    B --> C[Embeddings]
+    C --> D[Transformer]
+    D --> E[Attention sur les tokens pertinents]
+    E --> F[Prédiction du prochain token]
+    F --> G[Ajout du token à la réponse]
+    G --> D
+```
+
+### Ce que le modèle "sait" déjà et ce qu'il reçoit maintenant
+
+Dans notre exemple, le modèle peut déjà avoir appris pendant l'entraînement :
+
+- ce qu'est un LLM ;
+- comment expliquer une notion ;
+- le vocabulaire de base sur les modèles de langage.
+
+Mais il ne devine pas tout seul ce que tu veux précisément.
+Le **prompt** et le **contexte** lui indiquent :
+
+- le sujet à traiter maintenant ;
+- la langue ;
+- le niveau de détail attendu ;
+- les contraintes de ton ou de format si elles sont précisées.
+
+### Mise au point : idées reçues à éviter
+
+- **Le LLM ne comprend pas comme un humain** : il manipule des représentations apprises et des probabilités de continuation.
+- **Il ne fait pas de magie hors contexte** : s'il manque des informations utiles, sa réponse se dégrade.
+- **Il n'apprend pas pendant la conversation** : il utilise seulement le contexte qui lui est envoyé pendant l'appel.
+- **Il peut sembler raisonner profondément** parce qu'il a appris beaucoup de structures de texte, d'explications et de résolutions de problèmes.
+- **La qualité dépend de trois choses en même temps** : son entraînement, le contexte disponible et la manière dont on lui donne l'instruction.
+
+> Bonne intuition à retenir : un LLM est moins un "cerveau qui sait tout" qu'un
+> **générateur de suite plausible guidé par son entraînement et par le contexte présent**.
+
+---
+
+## 3. Tokens : l'unité qui gouverne tout
 
 Un **token** n'est pas toujours un mot.
 Selon le tokenizer, un token peut être :
@@ -63,6 +351,9 @@ Selon le tokenizer, un token peut être :
 - un morceau de mot ;
 - une ponctuation ;
 - un espace ou un caractère spécial.
+
+> 💡 Tu veux visualiser la tokenisation sur un vrai prompt ? Reprends l'exemple de la
+> [section 2](#2-du-prompt-à-la-réponse--le-trajet-complet).
 
 ### Exemple intuitif
 
@@ -85,7 +376,7 @@ car les phrases peuvent être plus longues ou plus flexionnelles.
 
 ---
 
-## 3. Fenêtre de contexte : la RAM du modèle
+## 4. Fenêtre de contexte : la RAM du modèle
 
 La **context window** correspond au nombre maximal de tokens visibles par le modèle à un instant donné.
 Elle contient généralement :
@@ -113,7 +404,7 @@ Pense à un tableau blanc de taille limitée :
 
 ---
 
-## 4. Température et top-p
+## 5. Température et top-p
 
 Ces paramètres influencent la façon dont le modèle choisit les tokens.
 
@@ -136,7 +427,7 @@ Prompt : `Propose trois noms pour un agent qui résume des pull requests.`
 
 ---
 
-## 5. Tarification : input, output, abonnements et API
+## 6. Tarification : input, output, abonnements et API
 
 ### 5.1 Deux mondes à distinguer
 
@@ -209,7 +500,7 @@ Parce qu'ils :
 
 ---
 
-## 6. La notion de plan
+## 7. La notion de plan
 
 Un **plan** est une décomposition explicite d'une tâche en étapes.
 C'est fondamental pour les agents parce que cela :
@@ -235,7 +526,7 @@ Plan possible :
 
 ---
 
-## 7. Prompting : les briques de base
+## 8. Prompting : les briques de base
 
 ### Zero-shot
 
@@ -290,7 +581,7 @@ Contraintes :
 
 ---
 
-## 8. Exemple Python simple : compter le coût d'une requête
+## 9. Exemple Python simple : compter le coût d'une requête
 
 ```python
 from dataclasses import dataclass
@@ -321,16 +612,22 @@ if __name__ == "__main__":
 1. Quelle différence entre un mot et un token ?
 <details><summary>Réponse</summary>Un token est une unité du tokenizer ; un mot peut correspondre à un ou plusieurs tokens.</details>
 
-2. Pourquoi une session agentique coûte-t-elle plus cher qu'une simple question ?
+2. À quoi sert un embedding ?
+<details><summary>Réponse</summary>À représenter un token ou un texte sous forme numérique pour que le modèle puisse le manipuler et comparer des proximités de sens.</details>
+
+3. Pourquoi une session agentique coûte-t-elle plus cher qu'une simple question ?
 <details><summary>Réponse</summary>Parce qu'elle réinjecte historique, résultats d'outils et itérations supplémentaires.</details>
 
-3. Quand utiliser une température basse ?
+4. Quand utiliser une température basse ?
 <details><summary>Réponse</summary>Pour les tâches de code, d'extraction, de synthèse fiable et de formatage strict.</details>
 
-4. Pourquoi écrire un plan avant d'agir ?
+5. Que fait l'attention dans un LLM ?
+<details><summary>Réponse</summary>Elle aide le modèle à pondérer les parties du contexte les plus utiles pour prédire le prochain token.</details>
+
+6. Pourquoi écrire un plan avant d'agir ?
 <details><summary>Réponse</summary>Pour décomposer la tâche, limiter les erreurs et rendre l'action vérifiable.</details>
 
-5. Que fait un system prompt ?
+7. Que fait un system prompt ?
 <details><summary>Réponse</summary>Il fixe le rôle, les contraintes et les garde-fous globaux du modèle ou de l'agent.</details>
 
 ---

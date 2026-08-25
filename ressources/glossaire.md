@@ -11,9 +11,11 @@
 | **Embedding** | Représentation vectorielle d'un texte utilisée pour comparer la similarité sémantique. |
 | **Eval** | Évaluation mesurée d'un agent ou d'un prompt sur un ensemble de cas. |
 | **Few-shot prompting** | Prompt contenant un petit nombre d'exemples. |
+| **Fine-tuning** | Phase d'ajustement d'un modèle déjà pré-entraîné pour mieux suivre des instructions ou mieux se comporter dans un domaine donné. |
 | **Function calling / tool calling** | Mécanisme par lequel le modèle propose l'appel structuré d'un outil externe. |
 | **Hallucination** | Réponse plausible mais fausse ou non fondée. |
 | **Human-in-the-loop** | Validation humaine à une étape clé d'un workflow automatisé. |
+| **Inférence** | Moment où l'on utilise le modèle entraîné pour produire une réponse à partir d'un prompt. |
 | **Instructions file** | Fichier `.instructions.md` dans un repo Copilot définissant des instructions qui s'appliquent automatiquement à un contexte de fichiers. |
 | **LLM** | Modèle de langage de grande taille, spécialisé dans la prédiction du prochain token. |
 | **MCP** | Model Context Protocol, protocole standard pour connecter clients et serveurs d'outils/resources/prompts. |
@@ -24,9 +26,11 @@
 | **Prompt caching** | Réutilisation partielle d'un prompt déjà traité pour réduire coûts et latence quand le fournisseur le permet. |
 | **Prompt file** | Fichier `.prompt.md` dans un repo Copilot définissant un prompt réutilisable invocable via "/" dans le chat. |
 | **Prompt injection** | Tentative de détourner le comportement d'un agent via une instruction cachée dans ses entrées. |
+| **Pré-entraînement** | Phase initiale où un modèle apprend sur une très grande quantité de texte, en général en prédisant le prochain token. |
 | **RAG** | Retrieval Augmented Generation : récupération de contexte externe avant génération. |
 | **ReAct** | Pattern agentique alternant raisonnement et action. |
 | **Resource** | Donnée ou document exposé par un serveur MCP. |
+| **Réseau de neurones** | Ensemble de couches de calcul qui transforment des nombres en représentations de plus en plus utiles pour une tâche. |
 | **SDLC** | Software Development Lifecycle : ensemble des étapes du cycle de vie d'un logiciel (spécification, développement, tests, déploiement, maintenance). |
 | **Skill / custom agent** | Agent ou jeu d'instructions réutilisable pour une tâche spécialisée. |
 | **Sous-agent** | Agent spécialisé appelé par un agent superviseur. |
@@ -38,6 +42,7 @@
 | **Top-p** | Paramètre de sampling qui limite la masse de probabilité considérée pour choisir le prochain token. |
 | **Tool** | Action exécutable par un agent : lire un fichier, lancer un test, appeler une API, etc. |
 | **Tour agentique** | Une itération de la boucle agentique : appel LLM → tool_use → tool_result → prochain appel LLM. |
+| **Transformer** | Architecture de réseau de neurones très utilisée dans les LLM, fondée sur le mécanisme d'attention pour traiter un contexte de tokens. |
 | **Troncature** | Suppression des messages les plus anciens quand la liste de messages dépasse la fenêtre de contexte. |
 | **Vector store** | Base stockant des embeddings pour retrouver rapidement des passages proches d'une requête. |
 | **Zero-shot prompting** | Prompt sans exemple. |
